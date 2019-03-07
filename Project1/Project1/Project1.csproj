@@ -11,4 +11,10 @@
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <ProjectReference Include="..\Project1.BLL\Project1.BLL.csproj" />
+    <ProjectReference Include="..\Project1.DataAccess\Project1.DataAccess.csproj" />
+  </ItemGroup>
+
 </Project>
