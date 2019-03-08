@@ -39,10 +39,10 @@ namespace Project1.DataAccess
 
             modelBuilder.Entity<Cupcake>(entity =>
             {
-                entity.ToTable("Cupcake", "Project0");
+                entity.ToTable("Cupcake", "Project1");
 
                 entity.HasIndex(e => e.Type)
-                    .HasName("UQ__Cupcake__F9B8A48B9B266B47")
+                    .HasName("UQ__Cupcake__F9B8A48B34886670")
                     .IsUnique();
 
                 entity.Property(e => e.Cost)
@@ -57,9 +57,9 @@ namespace Project1.DataAccess
             modelBuilder.Entity<CupcakeOrder>(entity =>
             {
                 entity.HasKey(e => e.OrderId)
-                    .HasName("PK__CupcakeO__C3905BCF1C57C31C");
+                    .HasName("PK__CupcakeO__C3905BCFD43C377E");
 
-                entity.ToTable("CupcakeOrder", "Project0");
+                entity.ToTable("CupcakeOrder", "Project1");
 
                 entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
 
@@ -68,19 +68,17 @@ namespace Project1.DataAccess
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.CupcakeOrder)
                     .HasForeignKey(d => d.CustomerId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Order_Customer");
 
                 entity.HasOne(d => d.Location)
                     .WithMany(p => p.CupcakeOrder)
                     .HasForeignKey(d => d.LocationId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Order_Location");
             });
 
             modelBuilder.Entity<CupcakeOrderItem>(entity =>
             {
-                entity.ToTable("CupcakeOrderItem", "Project0");
+                entity.ToTable("CupcakeOrderItem", "Project1");
 
                 entity.HasIndex(e => new { e.OrderId, e.CupcakeId })
                     .HasName("OrderToCupcake")
@@ -93,19 +91,17 @@ namespace Project1.DataAccess
                 entity.HasOne(d => d.Cupcake)
                     .WithMany(p => p.CupcakeOrderItem)
                     .HasForeignKey(d => d.CupcakeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_OrderItem_Cupcake");
 
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.CupcakeOrderItem)
                     .HasForeignKey(d => d.OrderId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_OrderItem_CupcakeOrder");
             });
 
             modelBuilder.Entity<Customer>(entity =>
             {
-                entity.ToTable("Customer", "Project0");
+                entity.ToTable("Customer", "Project1");
 
                 entity.Property(e => e.FirstName)
                     .IsRequired()
@@ -118,16 +114,15 @@ namespace Project1.DataAccess
                 entity.HasOne(d => d.DefaultLocationNavigation)
                     .WithMany(p => p.Customer)
                     .HasForeignKey(d => d.DefaultLocation)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Default_Location");
             });
 
             modelBuilder.Entity<Ingredient>(entity =>
             {
-                entity.ToTable("Ingredient", "Project0");
+                entity.ToTable("Ingredient", "Project1");
 
                 entity.HasIndex(e => e.Type)
-                    .HasName("UQ__Ingredie__F9B8A48B30F061FE")
+                    .HasName("UQ__Ingredie__F9B8A48B8D554271")
                     .IsUnique();
 
                 entity.Property(e => e.Type)
@@ -141,12 +136,12 @@ namespace Project1.DataAccess
 
             modelBuilder.Entity<Location>(entity =>
             {
-                entity.ToTable("Location", "Project0");
+                entity.ToTable("Location", "Project1");
             });
 
             modelBuilder.Entity<LocationInventory>(entity =>
             {
-                entity.ToTable("LocationInventory", "Project0");
+                entity.ToTable("LocationInventory", "Project1");
 
                 entity.HasIndex(e => new { e.LocationId, e.IngredientId })
                     .HasName("InventoryIngredient")
@@ -161,19 +156,17 @@ namespace Project1.DataAccess
                 entity.HasOne(d => d.Ingredient)
                     .WithMany(p => p.LocationInventory)
                     .HasForeignKey(d => d.IngredientId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Ingredient");
 
                 entity.HasOne(d => d.Location)
                     .WithMany(p => p.LocationInventory)
                     .HasForeignKey(d => d.LocationId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Location");
             });
 
             modelBuilder.Entity<RecipeItem>(entity =>
             {
-                entity.ToTable("RecipeItem", "Project0");
+                entity.ToTable("RecipeItem", "Project1");
 
                 entity.HasIndex(e => new { e.CupcakeId, e.IngredientId })
                     .HasName("CupcakeIngredient")
@@ -188,13 +181,11 @@ namespace Project1.DataAccess
                 entity.HasOne(d => d.Cupcake)
                     .WithMany(p => p.RecipeItem)
                     .HasForeignKey(d => d.CupcakeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Recipe_Cupcake");
 
                 entity.HasOne(d => d.Ingredient)
                     .WithMany(p => p.RecipeItem)
                     .HasForeignKey(d => d.IngredientId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Recipe_Ingredient");
             });
         }

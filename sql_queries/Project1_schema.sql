@@ -1,73 +1,73 @@
---CREATE DATABASE Project0;
+CREATE DATABASE Project1;
 
---GO
---CREATE SCHEMA Project0;
---GO
+GO
+CREATE SCHEMA Project1;
+GO
 
-CREATE TABLE Project0.Cupcake (
+CREATE TABLE Project1.Cupcake (
 	CupcakeId INT NOT NULL PRIMARY KEY IDENTITY,
 	Type NVARCHAR(100) UNIQUE NOT NULL,
 	Cost DECIMAL(8,2) NOT NULL DEFAULT(6.00)
 );
 
-CREATE TABLE Project0.Ingredient (
+CREATE TABLE Project1.Ingredient (
 	IngredientId INT NOT NULL PRIMARY KEY IDENTITY,
 	Type NVARCHAR(100) UNIQUE NOT NULL,
 	Units NVARCHAR(50) NOT NULL
 );
 
-CREATE TABLE Project0.RecipeItem (
+CREATE TABLE Project1.RecipeItem (
 	RecipeItemId INT NOT NULL PRIMARY KEY IDENTITY,
 	CupcakeID INT NOT NULL,
 	IngredientID INT NOT NULL,
 	Amount DECIMAL(10,6) NOT NULL,
 	CONSTRAINT CupcakeIngredient UNIQUE (CupcakeID, IngredientID),
-	CONSTRAINT FK_Recipe_Cupcake FOREIGN KEY (CupcakeID) REFERENCES Project0.Cupcake (CupcakeId),
-	CONSTRAINT FK_Recipe_Ingredient FOREIGN KEY (IngredientID) REFERENCES Project0.Ingredient (IngredientId)
+	CONSTRAINT FK_Recipe_Cupcake FOREIGN KEY (CupcakeID) REFERENCES Project1.Cupcake (CupcakeId) ON DELETE CASCADE,
+	CONSTRAINT FK_Recipe_Ingredient FOREIGN KEY (IngredientID) REFERENCES Project1.Ingredient (IngredientId) ON DELETE CASCADE
 );
 
-CREATE TABLE Project0.Location (
+CREATE TABLE Project1.Location (
 	LocationId INT NOT NULL PRIMARY KEY IDENTITY
 );
 
-CREATE TABLE Project0.LocationInventory (
+CREATE TABLE Project1.LocationInventory (
 	LocationInventoryId INT NOT NULL PRIMARY KEY IDENTITY,
 	LocationID INT NOT NULL,
 	IngredientID INT NOT NULL,
 	Amount DECIMAL(10,6) NOT NULL,
 	CONSTRAINT InventoryIngredient UNIQUE (LocationID, IngredientID),
-	CONSTRAINT FK_Location FOREIGN KEY (LocationID) REFERENCES Project0.Location (LocationId),
-	CONSTRAINT FK_Ingredient FOREIGN KEY (IngredientID) REFERENCES Project0.Ingredient (IngredientId)
+	CONSTRAINT FK_Location FOREIGN KEY (LocationID) REFERENCES Project1.Location (LocationId) ON DELETE CASCADE,
+	CONSTRAINT FK_Ingredient FOREIGN KEY (IngredientID) REFERENCES Project1.Ingredient (IngredientId) ON DELETE CASCADE
 );
 
-CREATE TABLE Project0.Customer (
+CREATE TABLE Project1.Customer (
 	CustomerId INT NOT NULL PRIMARY KEY IDENTITY,
 	FirstName NVARCHAR(100) NOT NULL,
 	LastName NVARCHAR(100) NOT NULL,
-	DefaultLocation INT NOT NULL,
-	CONSTRAINT FK_Default_Location FOREIGN KEY (DefaultLocation) REFERENCES Project0.Location (LocationId)
+	DefaultLocation INT,
+	CONSTRAINT FK_Default_Location FOREIGN KEY (DefaultLocation) REFERENCES Project1.Location (LocationId)
 );
 
-CREATE TABLE Project0.CupcakeOrder (
+CREATE TABLE Project1.CupcakeOrder (
 	OrderId INT NOT NULL PRIMARY KEY IDENTITY,
 	LocationID INT NOT NULL,
 	CustomerID INT NOT NULL,
 	OrderTime DATETIME2 NOT NULL,
-	CONSTRAINT FK_Order_Location FOREIGN KEY (LocationID) REFERENCES Project0.Location (LocationId),
-	CONSTRAINT FK_Order_Customer FOREIGN KEY (CustomerID) REFERENCES Project0.Customer (CustomerId),
+	CONSTRAINT FK_Order_Location FOREIGN KEY (LocationID) REFERENCES Project1.Location (LocationId) ON DELETE CASCADE,
+	CONSTRAINT FK_Order_Customer FOREIGN KEY (CustomerID) REFERENCES Project1.Customer (CustomerId) ON DELETE CASCADE
 );
 
-CREATE TABLE Project0.CupcakeOrderItem (
+CREATE TABLE Project1.CupcakeOrderItem (
 	CupcakeOrderItemId INT NOT NULL PRIMARY KEY IDENTITY,
 	OrderID INT NOT NULL,
 	CupcakeID INT NOT NULL,
 	Quantity INT NOT NULL
 	CONSTRAINT OrderToCupcake UNIQUE (OrderID, CupcakeID),
-	CONSTRAINT FK_OrderItem_CupcakeOrder FOREIGN KEY (OrderID) REFERENCES Project0.CupcakeOrder (OrderId),
-	CONSTRAINT FK_OrderItem_Cupcake FOREIGN KEY (CupcakeID) REFERENCES Project0.Cupcake (CupcakeId)
+	CONSTRAINT FK_OrderItem_CupcakeOrder FOREIGN KEY (OrderID) REFERENCES Project1.CupcakeOrder (OrderId) ON DELETE CASCADE,
+	CONSTRAINT FK_OrderItem_Cupcake FOREIGN KEY (CupcakeID) REFERENCES Project1.Cupcake (CupcakeId) ON DELETE CASCADE
 );
 
-INSERT INTO Project0.Cupcake (Type, Cost) VALUES
+INSERT INTO Project1.Cupcake (Type, Cost) VALUES
 	('Vanilla', 3.5),
 	('Chocolate', 5.25),
 	('ChocPeanutButter', 6.25),
@@ -77,7 +77,7 @@ INSERT INTO Project0.Cupcake (Type, Cost) VALUES
 	('Coconut', 4),
 	('Lemon', 4.7);
 	
-INSERT INTO Project0.Ingredient (Type, Units) VALUES
+INSERT INTO Project1.Ingredient (Type, Units) VALUES
 	('Flour', 'lbs'),
 	('BakingPowder', 'lbs'),
 	('Salt', 'lbs'),
@@ -97,7 +97,7 @@ INSERT INTO Project0.Ingredient (Type, Units) VALUES
 	('Lemon', 'each'),
 	('Amaretto', 'lbs');
 
-INSERT INTO Project0.RecipeItem 
+INSERT INTO Project1.RecipeItem 
 (CupcakeID, IngredientID, Amount) VALUES
 	(1, 1, 0.028),
 	(1, 2, 0.00094),

@@ -7,8 +7,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Project1.BLL;
+using Project1.DataAccess;
 
 namespace Project1
 {
@@ -31,6 +34,10 @@ namespace Project1
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddScoped<ILocationRepo, LocationRepo>();
+
+            services.AddDbContext<Project1Context>(builder =>
+                builder.UseSqlServer(Configuration.GetConnectionString("Project1Database")));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }

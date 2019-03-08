@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using P1B = Project1.BLL;
 
-namespace Project0.DataAccess
+namespace Project1.DataAccess
 {
     public static class Mapper
     {
