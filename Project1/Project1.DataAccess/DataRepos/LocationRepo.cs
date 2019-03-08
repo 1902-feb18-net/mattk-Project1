@@ -36,9 +36,10 @@ namespace Project1.DataAccess
             }
         }
 
-        public void AddLocation()
+        public void AddLocation(Project1.BLL.Location location)
         {
-            Context.Location.Add(new Location());
+            var newLocation = Mapper.Map(location);
+            Context.Location.Add(newLocation);
             SaveChangesAndCheckException();
         }
 
@@ -63,6 +64,22 @@ namespace Project1.DataAccess
             }
 
             SaveChangesAndCheckException();
+        }
+
+        public P1B.Location GetLocationById(int id)
+        {
+            ILogger logger = LogManager.GetCurrentClassLogger();
+
+            try
+            {
+                return Mapper.Map(Context.Location.Single(l => l.LocationId == id));
+            }
+            catch (SqlException ex)
+            {
+                logger.Error(ex);
+                return null;
+            }
+            
         }
 
         public int GetLastLocationAdded()

@@ -8,6 +8,7 @@ namespace Project1.BLL
     public class Location
     {
         public int Id { get; set; }
+        public string Name { get; set; }
 
         public static bool CheckCanOrderCupcake(int locationId,
             Dictionary<int, int> cupcakeInputs, List<Order> orders, List<OrderItem> orderItems)

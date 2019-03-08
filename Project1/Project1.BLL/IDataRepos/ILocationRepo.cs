@@ -7,8 +7,9 @@ namespace Project1.BLL
     public interface ILocationRepo
     {
         void SaveChangesAndCheckException();
-        void AddLocation();
+        void AddLocation(Project1.BLL.Location location);
         void FillLocationInventory(int locationId);
+        Location GetLocationById(int locationId);
         int GetLastLocationAdded();
         int? GetDefaultLocation(int customerId);
         Dictionary<int, decimal> GetLocationInv(int locationId);

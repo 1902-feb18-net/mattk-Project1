@@ -13,6 +13,7 @@ namespace Project1.DataAccess
         }
 
         public int LocationId { get; set; }
+        public string Name { get; set; }
 
         public virtual ICollection<CupcakeOrder> CupcakeOrder { get; set; }
         public virtual ICollection<Customer> Customer { get; set; }

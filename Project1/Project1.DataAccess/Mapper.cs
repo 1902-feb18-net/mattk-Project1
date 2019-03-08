@@ -11,11 +11,13 @@ namespace Project1.DataAccess
         // Location
         public static P1B.Location Map(DataAccess.Location location) => new P1B.Location
         {
-            Id = location.LocationId
+            Id = location.LocationId,
+            Name = location.Name
         };
         public static DataAccess.Location Map(P1B.Location location) => new DataAccess.Location
         {
-            LocationId = location.Id
+            LocationId = location.Id,
+            Name = location.Name
         };
         public static IEnumerable<P1B.Location> Map(IEnumerable<DataAccess.Location> locations) =>
             locations.Select(Map);

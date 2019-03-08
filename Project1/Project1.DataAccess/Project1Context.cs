@@ -128,6 +128,11 @@ namespace Project1.DataAccess
             modelBuilder.Entity<Location>(entity =>
             {
                 entity.ToTable("Location", "Project1");
+
+                entity.HasIndex(e => e.Name)
+                    .HasName("UQ__Location__2HzBmwvgSOEaXvTL")
+                    .IsUnique();
+
             });
 
             modelBuilder.Entity<LocationInventory>(entity =>
