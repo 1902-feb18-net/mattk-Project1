@@ -80,7 +80,7 @@ namespace Project1.DataAccess
             }
         }
 
-        public int GetDefaultLocation(int customerId)
+        public int? GetDefaultLocation(int customerId)
         {
             ILogger logger = LogManager.GetCurrentClassLogger();
 

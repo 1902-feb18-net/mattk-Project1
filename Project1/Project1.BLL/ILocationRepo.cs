@@ -10,7 +10,7 @@ namespace Project1.BLL
         void AddLocation();
         void FillLocationInventory(int locationId);
         int GetLastLocationAdded();
-        int GetDefaultLocation(int customerId);
+        int? GetDefaultLocation(int customerId);
         Dictionary<int, decimal> GetLocationInv(int locationId);
         IEnumerable<Project1.BLL.Location> GetAllLocations();
         IEnumerable<Project1.BLL.Order> GetLocationOrderHistory(int locationId);
