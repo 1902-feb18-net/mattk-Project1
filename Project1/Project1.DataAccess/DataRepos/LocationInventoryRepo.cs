@@ -37,16 +37,14 @@ namespace Project1.DataAccess.DataRepos
             }
         }
 
-        public IEnumerable<P1B.LocationInventory> 
+        public IEnumerable<P1B.LocationInventory>
             GetLocationInventoryByLocationId(int locationId)
         {
             ILogger logger = LogManager.GetCurrentClassLogger();
 
             try
             {
-                return Mapper.Map(Context.LocationInventory.Include(li => li.Location)
-                    .Include(li => li.Ingredient)
-                    .Where(li => li.LocationId == locationId));
+                return Mapper.Map(Context.LocationInventory.Where(li => li.LocationId == locationId));
             }
             catch (SqlException ex)
             {

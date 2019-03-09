@@ -45,6 +45,24 @@ namespace Project1.DataAccess
         public static IEnumerable<DC.LocationInventory> Map(IEnumerable<P1B.LocationInventory> locInvs) =>
             locInvs.Select(Map);
 
+        // Ingredient
+        public static P1B.Ingredient Map(DC.Ingredient ing) => new P1B.Ingredient
+        {
+            Id = ing.IngredientId,
+            Type = ing.Type,
+            Units = ing.Units
+        };
+        public static DC.Ingredient Map(P1B.Ingredient ing) => new DC.Ingredient
+        {
+            IngredientId = ing.Id,
+            Type = ing.Type,
+            Units = ing.Units
+        };
+        public static IEnumerable<P1B.Ingredient> Map(IEnumerable<DC.Ingredient> ings) =>
+            ings.Select(Map);
+        public static IEnumerable<DC.Ingredient> Map(IEnumerable<P1B.Ingredient> ings) =>
+            ings.Select(Map);
+
         // Customer
         public static P1B.Customer Map(DC.Customer customer) => new P1B.Customer
         {

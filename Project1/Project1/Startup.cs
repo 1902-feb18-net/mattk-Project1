@@ -36,6 +36,7 @@ namespace Project1
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddScoped<IIngredientRepo, IngredientRepo>();
             services.AddScoped<ILocationInventoryRepo, LocationInventoryRepo>();
             services.AddScoped<ILocationRepo, LocationRepo>();
 
