@@ -7,7 +7,7 @@ namespace Project1.BLL.IDataRepos
      public interface ICustomerRepo
     {
         bool CheckCustomerExists(int customerId);
-        void AddCustomer(string fName, string lName, int locationId);
+        void AddCustomer(Project1.BLL.Customer customer);
         int GetLastCustomerAdded();
         IEnumerable<Project1.BLL.Customer> GetAllCustomers();
     }

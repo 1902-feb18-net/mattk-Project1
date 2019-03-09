@@ -51,13 +51,13 @@ namespace Project1.DataAccess.DataRepos
             }
         }
 
-        public void AddCustomer(string fName, string lName, int locationId)
+        public void AddCustomer(Project1.BLL.Customer customer)
         {
             var newCustomer = new Project1.DataAccess.DataClasses.Customer
             {
-                FirstName = fName,
-                LastName = lName,
-                DefaultLocation = locationId
+                FirstName = customer.FirstName,
+                LastName = customer.LastName,
+                DefaultLocation = customer.DefaultLocation
             };
             Context.Customer.Add(newCustomer);
             SaveChangesAndCheckException();
