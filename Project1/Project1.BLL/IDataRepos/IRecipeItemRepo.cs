@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Project1.BLL
+namespace Project1.BLL.IDataRepos
 {
-    class IRecipeItemRepo
+    public interface IRecipeItemRepo
     {
+        Dictionary<int, Dictionary<int, decimal>> GetRecipes(Dictionary<int, int> cupcakeInputs);
     }
 }

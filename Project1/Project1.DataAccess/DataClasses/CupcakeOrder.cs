@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Project1.DataAccess
+namespace Project1.DataAccess.DataClasses
 {
     public partial class CupcakeOrder
     {

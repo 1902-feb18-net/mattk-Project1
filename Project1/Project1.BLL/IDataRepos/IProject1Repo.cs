@@ -4,7 +4,8 @@ using System.Text;
 
 namespace Project1.BLL.IDataRepos
 {
-    class IProject1Repo
+    public interface IProject1Repo
     {
+        void SaveChangesAndCheckException();
     }
 }

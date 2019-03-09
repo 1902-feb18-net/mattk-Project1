@@ -4,8 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Project1.BLL;
-using Project1.DataAccess;
+using Project1.BLL.IDataRepos;
 using P1B = Project1.BLL;
 
 namespace Project1.Controllers
@@ -13,12 +12,14 @@ namespace Project1.Controllers
     public class LocationController : Controller
     {
 
-        public LocationController(ILocationRepo locationRepo)
+        public LocationController(ILocationRepo locationRepo, ILocationInventoryRepo locInvRepo)
         {
             LocRepo = locationRepo;
+            LocInvRepo = locInvRepo;
         }
 
         public ILocationRepo LocRepo { get; set; }
+        public ILocationInventoryRepo LocInvRepo { get; set; }
 
         // GET: Location
         public ActionResult Index()
@@ -28,10 +29,13 @@ namespace Project1.Controllers
         }
 
         // GET: Location/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Inventory(int id)
         {
-            P1B.Location movie = LocRepo.GetLocationById(id);
-            return View(movie);
+            P1B.Location currentLocation = LocRepo.GetLocationById(id);
+            ViewData["currentLocation"] = currentLocation.Name;
+
+            var locInvs = LocInvRepo.GetLocationInventoryByLocationId(id);
+            return View(locInvs);
         }
 
         // GET: Location/Create
@@ -55,6 +59,8 @@ namespace Project1.Controllers
 
                 // TODO: Add insert logic here
                 LocRepo.AddLocation(location);
+                int newLocationId = LocRepo.GetLastLocationAdded();
+                LocInvRepo.FillLocationInventory(newLocationId);
                 return RedirectToAction(nameof(Index));
             }
             catch

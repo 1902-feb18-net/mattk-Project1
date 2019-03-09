@@ -11,7 +11,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Project1.BLL;
+using Project1.BLL.IDataRepos;
 using Project1.DataAccess;
+using Project1.DataAccess.DataRepos;
 
 namespace Project1
 {
@@ -34,6 +36,7 @@ namespace Project1
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.AddScoped<ILocationInventoryRepo, LocationInventoryRepo>();
             services.AddScoped<ILocationRepo, LocationRepo>();
 
             services.AddDbContext<Project1Context>(builder =>

@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Project1.DataAccess.DataClasses;
 
 namespace Project1.DataAccess
 {

@@ -2,22 +2,16 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Project1.BLL
+namespace Project1.BLL.IDataRepos
 {
     public interface ILocationRepo
     {
-        void SaveChangesAndCheckException();
+        bool CheckLocationExists(int locationId);
         void AddLocation(Project1.BLL.Location location);
-        void FillLocationInventory(int locationId);
         Location GetLocationById(int locationId);
         int GetLastLocationAdded();
         int? GetDefaultLocation(int customerId);
-        Dictionary<int, decimal> GetLocationInv(int locationId);
         IEnumerable<Project1.BLL.Location> GetAllLocations();
         IEnumerable<Project1.BLL.Order> GetLocationOrderHistory(int locationId);
-        bool CheckLocationExists(int locationId);
-        void UpdateLocationInv(int locationId, Dictionary<int, Dictionary<int, decimal>> recipes,
-            Dictionary<int, int> cupcakeInputs);
-
     }
 }
