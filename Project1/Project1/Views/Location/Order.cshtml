@@ -45,24 +45,18 @@
                 </tr>
             </thead>
             <tbody>
-                @{
-                    decimal sum = 0;
-                }
                 @for (int i = 0; i < Model.OrderItems.Count; i++)
                 {
                     <tr>
                         <td>
-                            @Html.DisplayFor(modelItem => Model.Cupcakes.Single(c => c.Id == Model.Cupcakes[i].Id).Type)
+                            @Html.DisplayFor(modelItem => Model.Cupcakes.Single(c => c.Id == Model.OrderItems[i].CupcakeId).Type)
                         </td>
                         <td>
                             @Html.DisplayFor(modelItem => Model.OrderItems[i].Quantity)
                         </td>
                         <td>
-                            $@Html.DisplayFor(modelItem => Model.Cupcakes.Single(c => c.Id == Model.Cupcakes[i].Id).Cost)
+                            $@Html.DisplayFor(modelItem => Model.Cupcakes.Single(c => c.Id == Model.OrderItems[i].CupcakeId).Cost)
                         </td>
-                        @{
-                            sum += (Model.OrderItems[i].Quantity ?? 0) * Model.Cupcakes.Single(c => c.Id == Model.Cupcakes[i].Id).Cost;
-                        }
                     </tr>
                 }
             </tbody>
@@ -73,7 +67,7 @@
             Order Total
         </dt>
         <dd class="col-sm-10">
-            $@sum
+            $@Html.DisplayFor(model => model.OrderTotal)
         </dd>
 
     </dl>

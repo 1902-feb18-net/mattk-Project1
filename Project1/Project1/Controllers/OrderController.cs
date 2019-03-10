@@ -100,13 +100,13 @@ namespace Project1.Controllers
                 Locations = LocRepo.GetAllLocations().ToList(),
                 Customers = CustomerRepo.GetAllCustomers().ToList(),
                 Cupcakes = cupcakes,
-                OrderItems = orderItems
+                OrderItems = orderItems,
+                OrderTotal = OrderRepo.GetOrder(order.Id).GetTotalCost(OrderItemRepo.GetOrderItems(order.Id).ToList(),
+                                        cupcakes.ToList())
             };
             // give the Create view values for its dropdown
             return View(viewModel);
         }
-
-        
 
         // GET: Order/Create
         public ActionResult Create()
