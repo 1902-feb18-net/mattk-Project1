@@ -1,25 +1,6 @@
 ﻿body {
-    background-image: linear-gradient(to bottom, #FFB7DB, #dbecfc);
-    text-shadow: -1px 0px 4px #ffffff, 0px 1px 4px #ffffff, 1px 0px 4px #ffffff, 0px -1px 4px #ffffff;
-    /*font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;*/
-    /*font-family: 'Aleo', serif;*/
-    /*font-family: 'Amaranth', sans-serif;*/
-    /*font-family: 'MS Gothic';*/
-    /*font-family: 'Itim', cursive;*/
-    /*font-family: Calibri;*/
-    /*font-family: 'Srisakdi', cursive;*/
-    /*font-family: 'Dancing Script', cursive;*/
-    /*font-family: 'Sacramento', cursive;*/
-    /*font-family: 'Neuton', serif;*/
-    /*font-family: 'Merienda', cursive;*/
-    /*font-family: 'Merienda';*/
-    /*font-family: 'Press Start 2P', cursive;*/
-    /*font-family: 'Shadows Into Light Two', cursive;*/
-    /*font-family: 'Charm', cursive;*/
-    /*font-family: 'Baloo', cursive;*/
-    /*font-family: 'Bungee Inline', cursive;*/
-    /*font-family: 'Capriola', sans-serif;*/
-    /*font-family: 'Eczar', serif;*/
+    background-image: linear-gradient(to bottom, #fee2f0, #e5f1fc);
+    text-shadow: -1px 0px 4px #E6FFE6, 0px 1px 4px #E6FFE6, 1px 0px 4px #E6FFE6, 0px -1px 4px #E6FFE6;
 }
 
 header {

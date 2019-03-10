@@ -33,7 +33,6 @@ namespace Project1.Controllers
         public ILocationInventoryRepo LocationInventoryRepo { get; set; }
         public IRecipeItemRepo RecipeItemRepo { get; set; }
 
-
         // GET: Order
         public ActionResult Index()
         {
@@ -79,6 +78,8 @@ namespace Project1.Controllers
             // give the Create view values for its dropdown
             return View(viewModel);
         }
+
+        
 
         // GET: Order/Create
         public ActionResult Create()
