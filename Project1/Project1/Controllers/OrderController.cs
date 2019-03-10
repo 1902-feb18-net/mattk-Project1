@@ -13,18 +13,25 @@ namespace Project1.Controllers
     public class OrderController : Controller
     {
         public OrderController(ICustomerRepo customerRepo, ILocationRepo locationRepo,
-            IOrderRepo orderRepo, ICupcakeRepo cupcakeRepo)
+            IOrderRepo orderRepo, ICupcakeRepo cupcakeRepo, IOrderItemRepo orderItemRepo,
+            ILocationInventoryRepo locationInventoryRepo, IRecipeItemRepo recipeItemRepo)
         {
             LocRepo = locationRepo;
             CustomerRepo = customerRepo;
             OrderRepo = orderRepo;
             CupcakeRepo = cupcakeRepo;
+            OrderItemRepo = orderItemRepo;
+            LocationInventoryRepo = locationInventoryRepo;
+            RecipeItemRepo = recipeItemRepo;
         }
 
         public ILocationRepo LocRepo { get; set; }
         public ICustomerRepo CustomerRepo { get; set; }
         public IOrderRepo OrderRepo { get; set; }
         public ICupcakeRepo CupcakeRepo { get; set; }
+        public IOrderItemRepo OrderItemRepo { get; set; }
+        public ILocationInventoryRepo LocationInventoryRepo { get; set; }
+        public IRecipeItemRepo RecipeItemRepo { get; set; }
 
 
         // GET: Order
@@ -91,18 +98,29 @@ namespace Project1.Controllers
         {
             try
             {
-                // TODO: Add insert logic here
                 var newOrder = new P1B.Order
                 {
                     OrderLocation = viewModel.LocationId,
                     OrderCustomer = viewModel.CustomerId,
                     OrderTime = DateTime.Now
                 };
+                OrderRepo.AddCupcakeOrder(newOrder);
 
-                // TODO: Add insert logic here
-                //OrderRepo.AddCupcakeOrder(newOrder);
+                int newOrderId = OrderRepo.GetLastCupcakeOrderAdded();
 
-                List<Project1.BLL.OrderItem> newOrderItems = viewModel.OrderItems.ToList();
+                for (int i = 0; i < viewModel.OrderItems.Count; i++)
+                {
+                    viewModel.OrderItems[i].OrderId = newOrderId;
+                    viewModel.OrderItems[i].CupcakeId = i + 1;
+                }
+
+                List<Project1.BLL.OrderItem> newOrderItems = viewModel.OrderItems
+                                                    .Where(oi => oi.Quantity != null).ToList();
+                OrderItemRepo.AddCupcakeOrderItems(newOrderItems);
+
+                var recipes = RecipeItemRepo.GetRecipes(newOrderItems);
+                LocationInventoryRepo.UpdateLocationInv(viewModel.LocationId, recipes, newOrderItems);
+
                 return RedirectToAction(nameof(Index));
             }
             catch

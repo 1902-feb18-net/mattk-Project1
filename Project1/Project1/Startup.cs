@@ -42,6 +42,8 @@ namespace Project1
             services.AddScoped<ICustomerRepo, CustomerRepo>();
             services.AddScoped<ICupcakeRepo, CupcakeRepo>();
             services.AddScoped<IOrderRepo, OrderRepo>();
+            services.AddScoped<IOrderItemRepo, OrderItemRepo>();
+            services.AddScoped<IRecipeItemRepo, RecipeItemRepo>();
 
 
             services.AddDbContext<Project1Context>(builder =>

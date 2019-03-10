@@ -77,7 +77,7 @@ namespace Project1.DataAccess.DataRepos
         }
 
         public void UpdateLocationInv(int locationId, Dictionary<int, Dictionary<int, decimal>> recipes,
-            Dictionary<int, int> cupcakeInputs)
+            List<Project1.BLL.OrderItem> orderItems)
         {
             // For each cupcake in the order, take that cupcake recipe and cupcake qnty, and subtract
             // the order ingredient amounts required from the store location's inventory.
@@ -90,9 +90,9 @@ namespace Project1.DataAccess.DataRepos
             {
                 foreach (var locationInv in Context.LocationInventory.Where(li => li.LocationId == locationId))
                 {
-                    foreach (var cupcake in cupcakeInputs)
+                    foreach (var orderItem in orderItems)
                     {
-                        locationInv.Amount -= recipes[cupcake.Key][locationInv.IngredientId] * cupcake.Value;
+                        locationInv.Amount -= recipes[orderItem.CupcakeId][locationInv.IngredientId] * (orderItem.Quantity ?? 0);
                     }
                 }
             }

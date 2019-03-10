@@ -8,11 +8,11 @@ using System.Text;
 
 namespace Project1.DataAccess.DataRepos
 {
-    public class RecipeItemRepo : IProject1Repo, IRecipeItemRepo
+    public class OrderItemRepo : IProject1Repo, IOrderItemRepo
     {
         public static Project1Context Context { get; set; }
 
-        public RecipeItemRepo(Project1Context dbContext)
+        public OrderItemRepo(Project1Context dbContext)
         {
             Context = dbContext;
         }
@@ -35,26 +35,37 @@ namespace Project1.DataAccess.DataRepos
             }
         }
 
-        public Dictionary<int, Dictionary<int, decimal>> GetRecipes(List<Project1.BLL.OrderItem> orderItems)
+        public void AddCupcakeOrderItems(List<Project1.BLL.OrderItem> orderItems)
+        {
+            foreach (var orderItem in orderItems)
+            {
+                Context.CupcakeOrderItem.Add(Mapper.Map(orderItem));
+            }
+            SaveChangesAndCheckException();
+        }
+
+        public IEnumerable<Project1.BLL.OrderItem> GetAllOrderItems()
         {
             ILogger logger = LogManager.GetCurrentClassLogger();
 
             try
             {
-                Dictionary<int, Dictionary<int, decimal>> recipes = new Dictionary<int, Dictionary<int, decimal>>();
+                return Mapper.Map(Context.CupcakeOrderItem.ToList());
+            }
+            catch (SqlException ex)
+            {
+                logger.Error(ex);
+                return null;
+            }
+        }
 
-                // Get each recipe for each cupcake that is in the order
-                foreach (var orderItem in orderItems)
-                {
-                    Dictionary<int, decimal> recipe = new Dictionary<int, decimal>();
-                    foreach (var recipeItem in Context.RecipeItem.Where(r => r.CupcakeId == orderItem.CupcakeId).ToList())
-                    {
-                        recipe[recipeItem.IngredientId] = recipeItem.Amount;
-                    }
-                    recipes[orderItem.CupcakeId] = recipe;
-                }
+        public IEnumerable<Project1.BLL.OrderItem> GetOrderItems(int orderId)
+        {
+            ILogger logger = LogManager.GetCurrentClassLogger();
 
-                return recipes;
+            try
+            {
+                return Mapper.Map(Context.CupcakeOrderItem.Where(coi => coi.OrderId == orderId));
             }
             catch (SqlException ex)
             {

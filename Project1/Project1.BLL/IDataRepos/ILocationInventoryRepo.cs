@@ -10,6 +10,6 @@ namespace Project1.BLL.IDataRepos
         IEnumerable<P1B.LocationInventory> GetLocationInventoryByLocationId(int locationId);
         void FillLocationInventory(int locationId);
         void UpdateLocationInv(int locationId, Dictionary<int, Dictionary<int, decimal>> recipes,
-            Dictionary<int, int> cupcakeInputs);
+            List<Project1.BLL.OrderItem> orderItems);
     }
 }

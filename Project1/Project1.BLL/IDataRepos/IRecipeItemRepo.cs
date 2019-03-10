@@ -6,6 +6,6 @@ namespace Project1.BLL.IDataRepos
 {
     public interface IRecipeItemRepo
     {
-        Dictionary<int, Dictionary<int, decimal>> GetRecipes(Dictionary<int, int> cupcakeInputs);
+        Dictionary<int, Dictionary<int, decimal>> GetRecipes(List<Project1.BLL.OrderItem> orderItems);
     }
 }
