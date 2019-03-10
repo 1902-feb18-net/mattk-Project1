@@ -57,7 +57,27 @@ namespace Project1.Controllers
         // GET: Order/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            IEnumerable<P1B.Customer> customers = CustomerRepo.GetAllCustomers();
+            IEnumerable<P1B.Location> locations = LocRepo.GetAllLocations();
+            List<Project1.BLL.Cupcake> cupcakes = CupcakeRepo.GetAllCupcakes().OrderBy(c => c.Id).ToList();
+            List<Project1.BLL.OrderItem> orderItems = OrderItemRepo.GetOrderItems(id).ToList();
+            Project1.BLL.Order order = OrderRepo.GetOrder(id);
+
+            var viewModel = new OrderViewModel
+            {
+                OrderId = id,
+                LocationId = order.OrderLocation,
+                LocationName = locations.Single(l => l.Id == order.OrderLocation).Name,
+                CustomerId = order.OrderCustomer,
+                CustomerName = customers.Single(c => c.Id == order.OrderCustomer).ReturnFullName(),
+                OrderTime = order.OrderTime,
+                Locations = LocRepo.GetAllLocations().ToList(),
+                Customers = CustomerRepo.GetAllCustomers().ToList(),
+                Cupcakes = cupcakes,
+                OrderItems = orderItems
+            };
+            // give the Create view values for its dropdown
+            return View(viewModel);
         }
 
         // GET: Order/Create
