@@ -103,6 +103,10 @@ namespace Project1.DataAccess
                     .IsRequired()
                     .HasMaxLength(100);
 
+                entity.HasIndex(e => new { e.FirstName, e.LastName })
+                    .HasName("FullName")
+                    .IsUnique();
+
                 entity.HasOne(d => d.DefaultLocationNavigation)
                     .WithMany(p => p.Customer)
                     .HasForeignKey(d => d.DefaultLocation)
@@ -144,7 +148,7 @@ namespace Project1.DataAccess
                     .HasName("InventoryIngredient")
                     .IsUnique();
 
-                entity.Property(e => e.Amount).HasColumnType("decimal(10, 6)");
+                entity.Property(e => e.Amount).HasColumnType("decimal(16, 6)");
 
                 entity.Property(e => e.IngredientId).HasColumnName("IngredientID");
 

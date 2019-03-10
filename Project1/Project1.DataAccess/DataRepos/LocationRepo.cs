@@ -50,6 +50,18 @@ namespace Project1.DataAccess.DataRepos
             }
         }
 
+        public bool CheckLocationNameExists(string locationName)
+        {
+            try
+            {
+                return Context.Location.Any(l => l.Name == locationName);
+            }
+            catch (SqlException ex)
+            {
+                _logger.LogError(ex.ToString());
+                return false;
+            }
+        }
 
         public void AddLocation(Project1.BLL.Location location)
         {

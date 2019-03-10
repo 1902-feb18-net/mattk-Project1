@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Project1.BLL.IDataRepos;
 using Project1.ViewModels;
 using P1B = Project1.BLL;
@@ -12,9 +13,12 @@ namespace Project1.Controllers
 {
     public class OrderController : Controller
     {
+        private readonly ILogger<OrderController> _logger;
+
         public OrderController(ICustomerRepo customerRepo, ILocationRepo locationRepo,
             IOrderRepo orderRepo, ICupcakeRepo cupcakeRepo, IOrderItemRepo orderItemRepo,
-            ILocationInventoryRepo locationInventoryRepo, IRecipeItemRepo recipeItemRepo)
+            ILocationInventoryRepo locationInventoryRepo, IRecipeItemRepo recipeItemRepo,
+            ILogger<OrderController> logger)
         {
             LocRepo = locationRepo;
             CustomerRepo = customerRepo;
@@ -23,6 +27,8 @@ namespace Project1.Controllers
             OrderItemRepo = orderItemRepo;
             LocationInventoryRepo = locationInventoryRepo;
             RecipeItemRepo = recipeItemRepo;
+
+            _logger = logger;
         }
 
         public ILocationRepo LocRepo { get; set; }

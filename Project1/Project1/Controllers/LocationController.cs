@@ -8,15 +8,18 @@ using Project1.BLL.IDataRepos;
 using P1B = Project1.BLL;
 using Project1.ViewModels;
 using System.Text.RegularExpressions;
+using Microsoft.Extensions.Logging;
 
 namespace Project1.Controllers
 {
     public class LocationController : Controller
     {
+        private readonly ILogger<LocationController> _logger;
+
         public LocationController(ICustomerRepo customerRepo, ILocationRepo locationRepo,
             IOrderRepo orderRepo, ICupcakeRepo cupcakeRepo, IOrderItemRepo orderItemRepo,
             ILocationInventoryRepo locationInventoryRepo, IRecipeItemRepo recipeItemRepo,
-            IIngredientRepo ingRepo)
+            IIngredientRepo ingRepo, ILogger<LocationController> logger)
         {
             LocRepo = locationRepo;
             CustomerRepo = customerRepo;
@@ -26,6 +29,8 @@ namespace Project1.Controllers
             LocationInventoryRepo = locationInventoryRepo;
             RecipeItemRepo = recipeItemRepo;
             IngRepo = ingRepo;
+
+            _logger = logger;
         }
 
         public ILocationRepo LocRepo { get; set; }
@@ -166,6 +171,17 @@ namespace Project1.Controllers
         {
             try
             {
+                if (location.Name.Length == 0)
+                {
+                    _logger.LogWarning("The location name cannot be empty.");
+                    return RedirectToAction("Error", "Home");
+                }
+                if (LocRepo.CheckLocationNameExists(location.Name))
+                {
+                    _logger.LogWarning("This location name has already been used in the database.");
+                    return RedirectToAction("Error", "Home");
+                }
+
                 // TODO: Add insert logic here
                 var newLocation = new P1B.Location
                 {
