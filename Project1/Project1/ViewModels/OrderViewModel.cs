@@ -33,7 +33,7 @@ namespace Project1.ViewModels
         [Display(Name = "What Kinds of Cupcakes?")]
         public List<Project1.BLL.OrderItem> OrderItems { get; set; } = null;
 
-
+        public decimal OrderTotal { get; set; }
 
 
 

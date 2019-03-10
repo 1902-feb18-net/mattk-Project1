@@ -33,12 +33,33 @@ namespace Project1.Controllers
         public ILocationInventoryRepo LocationInventoryRepo { get; set; }
         public IRecipeItemRepo RecipeItemRepo { get; set; }
 
-        // GET: Order
-        public ActionResult Index()
+        public ActionResult Index(string sortOrder)
         {
+            ViewData["TimeSortParm"] = String.IsNullOrEmpty(sortOrder) ? "time_desc" : "";
+            ViewData["OrderTotalSortParm"] = sortOrder == "OrderTotal" ? "order_total_desc" : "OrderTotal";
+
+            IEnumerable<P1B.Order> orders = OrderRepo.GetAllOrders();
             IEnumerable<P1B.Customer> customers = CustomerRepo.GetAllCustomers();
             IEnumerable<P1B.Location> locations = LocRepo.GetAllLocations();
-            IEnumerable<P1B.Order> orders = OrderRepo.GetAllOrders();
+            IEnumerable<P1B.Cupcake> cupcakes = CupcakeRepo.GetAllCupcakes();
+
+            switch (sortOrder)
+            {
+                case "time_desc":
+                    orders = orders.OrderByDescending(o => o.OrderTime);
+                    break;
+                case "OrderTotal":
+                    orders = orders.OrderBy(o => o.GetTotalCost(OrderItemRepo.GetOrderItems(o.Id).ToList(),
+                        cupcakes.ToList()));
+                    break;
+                case "order_total_desc":
+                    orders = orders.OrderByDescending(o => o.GetTotalCost(OrderItemRepo.GetOrderItems(o.Id).ToList(),
+                        cupcakes.ToList()));
+                    break;
+                default:
+                    orders = orders.OrderBy(o => o.OrderTime);
+                    break;
+            }
 
             var viewModels = orders.Select(o => new OrderViewModel
             {
@@ -47,7 +68,13 @@ namespace Project1.Controllers
                 LocationName = locations.Single(l => l.Id == o.OrderLocation).Name,
                 CustomerId = o.OrderCustomer,
                 CustomerName = customers.Single(c => c.Id == o.OrderCustomer).ReturnFullName(),
-                OrderTime = o.OrderTime
+                OrderTime = o.OrderTime,
+                Locations = locations.ToList(),
+                Customers = customers.ToList(),
+                Cupcakes = cupcakes.ToList(),
+                OrderItems = OrderItemRepo.GetOrderItems(o.Id).ToList(),
+                OrderTotal = OrderRepo.GetOrder(o.Id).GetTotalCost(OrderItemRepo.GetOrderItems(o.Id).ToList(),
+                                        cupcakes.ToList())
             }).ToList();
 
             return View(viewModels);
