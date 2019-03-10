@@ -53,8 +53,9 @@ namespace Project1.Controllers
                 CustomerId = c.Id,
                 FirstName = c.FirstName,
                 LastName = c.LastName,
-                DefaultLocation = c.DefaultLocation,
-                DefaultLocationName = locations.Single(l => l.Id == c.DefaultLocation).Name
+                DefaultLocation = c.DefaultLocation ?? null,
+                DefaultLocationName = c.DefaultLocation != null ? 
+                (locations.Single(l => l.Id == (c.DefaultLocation ?? 0))).Name : "(none)"
             }).ToList();
 
             return View(viewModels);
@@ -153,6 +154,7 @@ namespace Project1.Controllers
             {
                 Locations = LocRepo.GetAllLocations().ToList()
             };
+
             // give the Create view values for its dropdown
             return View(viewModel);
         }
@@ -164,6 +166,17 @@ namespace Project1.Controllers
         {
             try
             {
+                int defLocation = customer.DefaultLocation ?? 0;
+                if (defLocation != 0)
+                {
+                    bool LocationExists = LocRepo.CheckLocationExists(defLocation);
+                    if (!LocationExists)
+                    {
+                        _logger.LogWarning("This location is not in the database.");
+                        return RedirectToAction("Error", "Home");
+                    }
+                }
+
                 // TODO: Add insert logic here
                 var newCustomer = new P1B.Customer
                 {
