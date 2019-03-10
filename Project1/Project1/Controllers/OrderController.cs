@@ -41,7 +41,7 @@ namespace Project1.Controllers
             IEnumerable<P1B.Order> orders = OrderRepo.GetAllOrders();
             IEnumerable<P1B.Customer> customers = CustomerRepo.GetAllCustomers();
             IEnumerable<P1B.Location> locations = LocRepo.GetAllLocations();
-            IEnumerable<P1B.Cupcake> cupcakes = CupcakeRepo.GetAllCupcakes();
+            IEnumerable<P1B.Cupcake> cupcakes = CupcakeRepo.GetAllCupcakes().OrderBy(c => c.Id);
 
             switch (sortOrder)
             {

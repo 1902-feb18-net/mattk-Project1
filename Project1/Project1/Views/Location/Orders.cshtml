@@ -17,11 +17,12 @@
                     @Html.DisplayNameFor(model => model.CustomerName)
                 </th>
                 <th>
-                    <a asp-action="Index" asp-route-sortOrder="@ViewData["TimeSortParm"]">@Html.DisplayNameFor(model => model.OrderTime)</a>
-                    @*@Html.DisplayNameFor(model => model.OrderTime)*@
+                    <a asp-action="Orders" asp-route-id="@ViewData["LocationId"]"
+                asp-route-sortOrder="@ViewData["TimeSortParm"]">@Html.DisplayNameFor(model => model.OrderTime)</a>
                 </th>
                 <th>
-                    <a asp-action="Index" asp-route-sortOrder="@ViewData["OrderTotalSortParm"]">Order Total</a>
+                    <a asp-action="Orders" asp-route-id="@ViewData["LocationId"]"
+                asp-route-sortOrder="@ViewData["OrderTotalSortParm"]">Order Total</a>
                 </th>
             </tr>
         </thead>

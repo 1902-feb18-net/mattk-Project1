@@ -70,15 +70,38 @@ namespace Project1.Controllers
         }
 
         // GET: Order/Details/5
-        public ActionResult Orders(int id)
+        public ActionResult Orders(int id, string sortOrder)
         {
+            ViewData["TimeSortParm"] = String.IsNullOrEmpty(sortOrder) ? "time_desc" : "";
+            ViewData["OrderTotalSortParm"] = sortOrder == "OrderTotal" ? "order_total_desc" : "OrderTotal";
+
             IEnumerable<P1B.Customer> customers = CustomerRepo.GetAllCustomers();
             IEnumerable<P1B.Location> locations = LocRepo.GetAllLocations();
             List<Project1.BLL.Cupcake> cupcakes = CupcakeRepo.GetAllCupcakes().OrderBy(c => c.Id).ToList();
-            List<Project1.BLL.Order> orders = LocRepo.GetLocationOrderHistory(id).ToList();
+            IEnumerable<P1B.Order> orders = LocRepo.GetLocationOrderHistory(id).ToList();
             List<OrderViewModel> viewModels = new List<OrderViewModel>();
 
             ViewData["LocationName"] = locations.Single(l => l.Id == id).Name;
+            ViewData["LocationId"] = id;
+
+
+            switch (sortOrder)
+            {
+                case "time_desc":
+                    orders = orders.OrderByDescending(o => o.OrderTime);
+                    break;
+                case "OrderTotal":
+                    orders = orders.OrderBy(o => o.GetTotalCost(OrderItemRepo.GetOrderItems(o.Id).ToList(),
+                        cupcakes.ToList()));
+                    break;
+                case "order_total_desc":
+                    orders = orders.OrderByDescending(o => o.GetTotalCost(OrderItemRepo.GetOrderItems(o.Id).ToList(),
+                        cupcakes.ToList()));
+                    break;
+                default:
+                    orders = orders.OrderBy(o => o.OrderTime);
+                    break;
+            }
 
             foreach (var order in orders)
             {
@@ -93,8 +116,10 @@ namespace Project1.Controllers
                     Locations = locations.ToList(),
                     Customers = customers.ToList(),
                     Cupcakes = cupcakes,
-                    OrderItems = OrderItemRepo.GetOrderItems(order.Id).ToList()
-            });
+                    OrderItems = OrderItemRepo.GetOrderItems(order.Id).ToList(),
+                    OrderTotal = OrderRepo.GetOrder(order.Id).GetTotalCost(OrderItemRepo.GetOrderItems(order.Id).ToList(),
+                                        cupcakes.ToList())
+                });
             }
 
             return View(viewModels);
