@@ -29,10 +29,19 @@ namespace Project1.Controllers
         public ICupcakeRepo CupcakeRepo { get; set; }
 
         // GET: Customer
-        public ActionResult Index()
+        public ActionResult Index(string searchString)
         {
+            ViewData["CurrentFilter"] = searchString;
+
             IEnumerable<P1B.Customer> customers = CustomerRepo.GetAllCustomers();
             IEnumerable<P1B.Location> locations = LocRepo.GetAllLocations();
+
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                customers = customers.Where(c => c.FirstName.ToUpper().Contains(searchString.ToUpper())
+                            || c.LastName.ToUpper().Contains(searchString.ToUpper()));
+            }
 
             var viewModels = customers.Select(c => new CustomerViewModel
             {
