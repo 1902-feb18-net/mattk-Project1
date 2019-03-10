@@ -10,5 +10,7 @@ namespace Project1.BLL.IDataRepos
         void AddCustomer(Project1.BLL.Customer customer);
         int GetLastCustomerAdded();
         IEnumerable<Project1.BLL.Customer> GetAllCustomers();
+        IEnumerable<Project1.BLL.Order> GetCustomerOrderHistory(int customerId);
+        IEnumerable<Project1.BLL.OrderItem> GetCustomerOrderItems(int customerId);
     }
 }

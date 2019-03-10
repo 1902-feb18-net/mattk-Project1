@@ -92,5 +92,38 @@ namespace Project1.DataAccess.DataRepos
                 return null;
             }
         }
+
+        public IEnumerable<Order> GetCustomerOrderHistory(int customerId)
+        {
+            ILogger logger = LogManager.GetCurrentClassLogger();
+
+            try
+            {
+                return Mapper.Map(Context.CupcakeOrder.Where(co => co.CustomerId == customerId).ToList());
+            }
+            catch (SqlException ex)
+            {
+                logger.Error(ex);
+                return null;
+            }
+        }
+
+        public IEnumerable<OrderItem> GetCustomerOrderItems(int customerId)
+        {
+            ILogger logger = LogManager.GetCurrentClassLogger();
+
+            try
+            {
+                var customerOrders = Context.CupcakeOrder.Where(co => co.CustomerId == customerId)
+                .Select(co => co.OrderId)
+                .ToList();
+                return Mapper.Map(Context.CupcakeOrderItem.Where(coi => customerOrders.Contains(coi.OrderId)));
+            }
+            catch (SqlException ex)
+            {
+                logger.Error(ex);
+                return null;
+            }
+        }
     }
 }

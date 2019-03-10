@@ -45,7 +45,6 @@ namespace Project1
             services.AddScoped<IOrderItemRepo, OrderItemRepo>();
             services.AddScoped<IRecipeItemRepo, RecipeItemRepo>();
 
-
             services.AddDbContext<Project1Context>(builder =>
                 builder.UseSqlServer(Configuration.GetConnectionString("Project1Database")));
 
