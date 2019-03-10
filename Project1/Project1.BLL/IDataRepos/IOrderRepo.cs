@@ -7,10 +7,10 @@ namespace Project1.BLL.IDataRepos
     public interface IOrderRepo
     {
         bool CheckOrderExists(int orderId);
-        void AddCupcakeOrder(int locationId, int customerId);
+        void AddCupcakeOrder(Project1.BLL.Order order);
         void AddCupcakeOrderItems(int orderId, Dictionary<int, int> cupcakeInputs);
         int GetLastCupcakeOrderAdded();
-        Project1.BLL.Order GetCupcakeOrder(int orderId);
+        Project1.BLL.Order GetOrder(int orderId);
         IEnumerable<Project1.BLL.Order> GetAllOrders();
         IEnumerable<Project1.BLL.OrderItem> GetAllOrderItems();
         IEnumerable<Project1.BLL.OrderItem> GetOrderItems(int orderId);

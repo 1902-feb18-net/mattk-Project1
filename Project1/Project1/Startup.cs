@@ -40,6 +40,8 @@ namespace Project1
             services.AddScoped<ILocationInventoryRepo, LocationInventoryRepo>();
             services.AddScoped<ILocationRepo, LocationRepo>();
             services.AddScoped<ICustomerRepo, CustomerRepo>();
+            services.AddScoped<ICupcakeRepo, CupcakeRepo>();
+            services.AddScoped<IOrderRepo, OrderRepo>();
 
 
             services.AddDbContext<Project1Context>(builder =>

@@ -14,8 +14,8 @@ namespace Project1.Controllers
     {
         public CustomerController(ICustomerRepo customerRepo, ILocationRepo locationRepo)
         {
-            CustomerRepo = customerRepo;
             LocRepo = locationRepo;
+            CustomerRepo = customerRepo;
         }
 
         public ILocationRepo LocRepo { get; set; }

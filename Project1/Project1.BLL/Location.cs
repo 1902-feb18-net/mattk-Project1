@@ -31,7 +31,7 @@ namespace Project1.BLL
                     {
                         if (orderItem.CupcakeId == item.Key)
                         {
-                            sum += orderItem.Quantity;
+                            sum += orderItem.Quantity ?? 0;
                         }
                     }
                 }

@@ -9,6 +9,6 @@ namespace Project1.BLL
         public int Id { get; set; }
         public int OrderId { get; set; }
         public int CupcakeId { get; set; }
-        public int Quantity { get; set; }
+        public int? Quantity { get; set; }
     }
 }

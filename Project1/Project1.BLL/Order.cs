@@ -22,7 +22,7 @@ namespace Project1.BLL
             decimal sum = 0;
             foreach (var orderItem in orderItems)
             {
-                sum += orderItem.Quantity * cupcakes.Single(c => c.Id == orderItem.CupcakeId).Cost;
+                sum += (orderItem.Quantity ?? 0) * cupcakes.Single(c => c.Id == orderItem.CupcakeId).Cost;
             }
             return sum;
         }

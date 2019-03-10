@@ -134,7 +134,7 @@ namespace Project1.DataAccess
             CupcakeOrderItemId = orderItem.Id,
             OrderId = orderItem.OrderId,
             CupcakeId = orderItem.CupcakeId,
-            Quantity = orderItem.Quantity
+            Quantity = orderItem.Quantity ?? 0
         };
         public static IEnumerable<P1B.OrderItem> Map(IEnumerable<DC.CupcakeOrderItem> orderItems) =>
             orderItems.Select(Map);

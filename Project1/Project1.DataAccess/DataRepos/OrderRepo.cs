@@ -51,13 +51,13 @@ namespace Project1.DataAccess.DataRepos
             }
         }
 
-        public void AddCupcakeOrder(int locationId, int customerId)
+        public void AddCupcakeOrder(Project1.BLL.Order order)
         {
             var newOrder = new Project1.DataAccess.DataClasses.CupcakeOrder
             {
-                LocationId = locationId,
-                CustomerId = customerId,
-                OrderTime = DateTime.Now
+                LocationId = order.OrderLocation,
+                CustomerId = order.OrderCustomer,
+                OrderTime = order.OrderTime
             };
             Context.CupcakeOrder.Add(newOrder);
             SaveChangesAndCheckException();
@@ -93,7 +93,7 @@ namespace Project1.DataAccess.DataRepos
             }
         }
 
-        public Order GetCupcakeOrder(int orderId)
+        public Order GetOrder(int orderId)
         {
             ILogger logger = LogManager.GetCurrentClassLogger();
 
