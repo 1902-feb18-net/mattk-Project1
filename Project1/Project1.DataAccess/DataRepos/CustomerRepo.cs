@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
-using NLog;
+using Microsoft.Extensions.Logging;
 using Project1.BLL;
 using Project1.BLL.IDataRepos;
 
@@ -11,6 +11,8 @@ namespace Project1.DataAccess.DataRepos
 {
     public class CustomerRepo : IProject1Repo, ICustomerRepo
     {
+        public readonly ILogger<CustomerRepo> _logger;
+
         public static Project1Context Context { get; set; }
 
         public CustomerRepo(Project1Context dbContext)
@@ -20,33 +22,29 @@ namespace Project1.DataAccess.DataRepos
 
         public void SaveChangesAndCheckException()
         {
-            ILogger logger = LogManager.GetCurrentClassLogger();
-
             try
             {
                 Context.SaveChanges();
             }
             catch (InvalidOperationException ex)
             {
-                logger.Error(ex);
+                _logger.LogError(ex.ToString());
             }
             catch (SqlException ex)
             {
-                logger.Error(ex);
+                _logger.LogError(ex.ToString());
             }
         }
 
         public bool CheckCustomerExists(int customerId)
         {
-            ILogger logger = LogManager.GetCurrentClassLogger();
-
             try
             {
                 return Context.Customer.Any(l => l.CustomerId == customerId);
             }
             catch (SqlException ex)
             {
-                logger.Error(ex);
+                _logger.LogError(ex.ToString());
                 return false;
             }
         }
@@ -65,53 +63,45 @@ namespace Project1.DataAccess.DataRepos
 
         public int GetLastCustomerAdded()
         {
-            ILogger logger = LogManager.GetCurrentClassLogger();
-
             try
             {
                 return Context.Customer.OrderByDescending(x => x.CustomerId).First().CustomerId;
             }
             catch (SqlException ex)
             {
-                logger.Error(ex);
+                _logger.LogError(ex.ToString());
                 return -1;
             }
         }
 
         public IEnumerable<Customer> GetAllCustomers()
         {
-            ILogger logger = LogManager.GetCurrentClassLogger();
-
             try
             {
                 return Mapper.Map(Context.Customer.ToList());
             }
             catch (SqlException ex)
             {
-                logger.Error(ex);
+                _logger.LogError(ex.ToString());
                 return null;
             }
         }
 
         public IEnumerable<Order> GetCustomerOrderHistory(int customerId)
         {
-            ILogger logger = LogManager.GetCurrentClassLogger();
-
             try
             {
                 return Mapper.Map(Context.CupcakeOrder.Where(co => co.CustomerId == customerId).ToList());
             }
             catch (SqlException ex)
             {
-                logger.Error(ex);
+                _logger.LogError(ex.ToString());
                 return null;
             }
         }
 
         public IEnumerable<OrderItem> GetCustomerOrderItems(int customerId)
         {
-            ILogger logger = LogManager.GetCurrentClassLogger();
-
             try
             {
                 var customerOrders = Context.CupcakeOrder.Where(co => co.CustomerId == customerId)
@@ -121,7 +111,7 @@ namespace Project1.DataAccess.DataRepos
             }
             catch (SqlException ex)
             {
-                logger.Error(ex);
+                _logger.LogError(ex.ToString());
                 return null;
             }
         }

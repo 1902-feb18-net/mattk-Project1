@@ -1,4 +1,4 @@
-﻿using NLog;
+﻿using Microsoft.Extensions.Logging;
 using Project1.BLL;
 using Project1.BLL.IDataRepos;
 using System;
@@ -12,6 +12,8 @@ namespace Project1.DataAccess.DataRepos
 {
     public class LocationRepo : IProject1Repo, ILocationRepo
     {
+        public readonly ILogger<LocationRepo> _logger;
+
         public static Project1Context Context { get; set; }
 
         public LocationRepo(Project1Context dbContext)
@@ -21,33 +23,29 @@ namespace Project1.DataAccess.DataRepos
 
         public void SaveChangesAndCheckException()
         {
-            ILogger logger = LogManager.GetCurrentClassLogger();
-
             try
             {
                 Context.SaveChanges();
             }
             catch (InvalidOperationException ex)
             {
-                logger.Error(ex);
+                _logger.LogError(ex.ToString());
             }
             catch (SqlException ex)
             {
-                logger.Error(ex);
+                _logger.LogError(ex.ToString());
             }
         }
 
         public bool CheckLocationExists(int locationId)
         {
-            ILogger logger = LogManager.GetCurrentClassLogger();
-
             try
             {
                 return Context.Location.Any(l => l.LocationId == locationId);
             }
             catch (SqlException ex)
             {
-                logger.Error(ex);
+                _logger.LogError(ex.ToString());
                 return false;
             }
         }
@@ -62,15 +60,13 @@ namespace Project1.DataAccess.DataRepos
 
         public P1B.Location GetLocationById(int id)
         {
-            ILogger logger = LogManager.GetCurrentClassLogger();
-
             try
             {
                 return Mapper.Map(Context.Location.Single(l => l.LocationId == id));
             }
             catch (SqlException ex)
             {
-                logger.Error(ex);
+                _logger.LogError(ex.ToString());
                 return null;
             }
             
@@ -78,60 +74,52 @@ namespace Project1.DataAccess.DataRepos
 
         public int GetLastLocationAdded()
         {
-            ILogger logger = LogManager.GetCurrentClassLogger();
-
             try
             {
                 return Context.Location.OrderByDescending(x => x.LocationId).First().LocationId;
             }
             catch (SqlException ex)
             {
-                logger.Error(ex);
+                _logger.LogError(ex.ToString());
                 return -1;
             }
         }
 
         public int? GetDefaultLocation(int customerId)
         {
-            ILogger logger = LogManager.GetCurrentClassLogger();
-
             try
             {
                 return Context.Customer.Single(c => c.CustomerId == customerId).DefaultLocation;
             }
             catch (SqlException ex)
             {
-                logger.Error(ex);
+                _logger.LogError(ex.ToString());
                 return -1;
             }
         }
 
         public IEnumerable<Project1.BLL.Location> GetAllLocations()
         {
-            ILogger logger = LogManager.GetCurrentClassLogger();
-
             try
             {
                 return Mapper.Map(Context.Location.ToList());
             }
             catch (SqlException ex)
             {
-                logger.Error(ex);
+                _logger.LogError(ex.ToString());
                 return null;
             }
         }
 
         public IEnumerable<P1B.Order> GetLocationOrderHistory(int locationId)
         {
-            ILogger logger = LogManager.GetCurrentClassLogger();
-
             try
             {
                 return Mapper.Map(Context.CupcakeOrder.Where(co => co.LocationId == locationId).ToList());
             }
             catch (SqlException ex)
             {
-                logger.Error(ex);
+                _logger.LogError(ex.ToString());
                 return null;
             }
         }

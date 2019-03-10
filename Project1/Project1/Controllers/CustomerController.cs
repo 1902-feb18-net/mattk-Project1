@@ -7,19 +7,25 @@ using Microsoft.AspNetCore.Mvc;
 using Project1.BLL.IDataRepos;
 using Project1.ViewModels;
 using P1B = Project1.BLL;
+using Microsoft.Extensions.Logging;
 
 namespace Project1.Controllers
 {
     public class CustomerController : Controller
     {
+        private readonly ILogger<CustomerController> _logger;
+
         public CustomerController(ICustomerRepo customerRepo, ILocationRepo locationRepo,
-            IOrderItemRepo orderItemRepo, IOrderRepo orderRepo, ICupcakeRepo cupcakeRepo)
+            IOrderItemRepo orderItemRepo, IOrderRepo orderRepo, ICupcakeRepo cupcakeRepo,
+            ILogger<CustomerController> logger)
         {
             LocRepo = locationRepo;
             CustomerRepo = customerRepo;
             OrderItemRepo = orderItemRepo;
             OrderRepo = orderRepo;
             CupcakeRepo = cupcakeRepo;
+
+            _logger = logger;
         }
 
         public ILocationRepo LocRepo { get; set; }
@@ -35,7 +41,6 @@ namespace Project1.Controllers
 
             IEnumerable<P1B.Customer> customers = CustomerRepo.GetAllCustomers();
             IEnumerable<P1B.Location> locations = LocRepo.GetAllLocations();
-
 
             if (!String.IsNullOrEmpty(searchString))
             {
@@ -172,9 +177,10 @@ namespace Project1.Controllers
                 return RedirectToAction(nameof(Index));
                 // TODO: Add insert logic here
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                _logger.LogError(ex.ToString());
+                return RedirectToAction("Error", "Home");
             }
         }
 

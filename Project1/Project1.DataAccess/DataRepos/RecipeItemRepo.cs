@@ -1,4 +1,4 @@
-﻿using NLog;
+﻿using Microsoft.Extensions.Logging;
 using Project1.BLL.IDataRepos;
 using System;
 using System.Collections.Generic;
@@ -10,6 +10,8 @@ namespace Project1.DataAccess.DataRepos
 {
     public class RecipeItemRepo : IProject1Repo, IRecipeItemRepo
     {
+        public readonly ILogger<RecipeItemRepo> _logger;
+
         public static Project1Context Context { get; set; }
 
         public RecipeItemRepo(Project1Context dbContext)
@@ -19,26 +21,22 @@ namespace Project1.DataAccess.DataRepos
 
         public void SaveChangesAndCheckException()
         {
-            ILogger logger = LogManager.GetCurrentClassLogger();
-
             try
             {
                 Context.SaveChanges();
             }
             catch (InvalidOperationException ex)
             {
-                logger.Error(ex);
+                _logger.LogError(ex.ToString());
             }
             catch (SqlException ex)
             {
-                logger.Error(ex);
+                _logger.LogError(ex.ToString());
             }
         }
 
         public Dictionary<int, Dictionary<int, decimal>> GetRecipes(List<Project1.BLL.OrderItem> orderItems)
         {
-            ILogger logger = LogManager.GetCurrentClassLogger();
-
             try
             {
                 Dictionary<int, Dictionary<int, decimal>> recipes = new Dictionary<int, Dictionary<int, decimal>>();
@@ -58,7 +56,7 @@ namespace Project1.DataAccess.DataRepos
             }
             catch (SqlException ex)
             {
-                logger.Error(ex);
+                _logger.LogError(ex.ToString());
                 return null;
             }
         }

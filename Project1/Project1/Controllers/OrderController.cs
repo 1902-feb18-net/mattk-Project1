@@ -146,6 +146,11 @@ namespace Project1.Controllers
         {
             try
             {
+
+
+
+
+
                 var newOrder = new P1B.Order
                 {
                     OrderLocation = viewModel.LocationId,

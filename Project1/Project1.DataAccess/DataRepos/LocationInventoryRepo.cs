@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using NLog;
+using Microsoft.Extensions.Logging;
 using Project1.BLL.IDataRepos;
 using System;
 using System.Collections.Generic;
@@ -12,6 +12,8 @@ namespace Project1.DataAccess.DataRepos
 {
     public class LocationInventoryRepo : IProject1Repo, ILocationInventoryRepo
     {
+        public readonly ILogger<LocationInventoryRepo> _logger;
+
         public static Project1Context Context { get; set; }
 
         public LocationInventoryRepo(Project1Context dbContext)
@@ -21,42 +23,36 @@ namespace Project1.DataAccess.DataRepos
 
         public void SaveChangesAndCheckException()
         {
-            ILogger logger = LogManager.GetCurrentClassLogger();
-
             try
             {
                 Context.SaveChanges();
             }
             catch (InvalidOperationException ex)
             {
-                logger.Error(ex);
+                _logger.LogError(ex.ToString());
             }
             catch (SqlException ex)
             {
-                logger.Error(ex);
+                _logger.LogError(ex.ToString());
             }
         }
 
         public IEnumerable<P1B.LocationInventory>
             GetLocationInventoryByLocationId(int locationId)
         {
-            ILogger logger = LogManager.GetCurrentClassLogger();
-
             try
             {
                 return Mapper.Map(Context.LocationInventory.Where(li => li.LocationId == locationId));
             }
             catch (SqlException ex)
             {
-                logger.Error(ex);
+                _logger.LogError(ex.ToString());
                 return null;
             }
         }
 
         public void FillLocationInventory(int locationId)
         {
-            ILogger logger = LogManager.GetCurrentClassLogger();
-
             try
             {
                 foreach (var item in Context.Ingredient.ToList())
@@ -70,7 +66,7 @@ namespace Project1.DataAccess.DataRepos
             }
             catch (SqlException ex)
             {
-                logger.Error(ex);
+                _logger.LogError(ex.ToString());
             }
 
             SaveChangesAndCheckException();
@@ -84,8 +80,6 @@ namespace Project1.DataAccess.DataRepos
             // The store location should already have been checked to make sure that its inventory
             // will not go negative from the order.
 
-            ILogger logger = LogManager.GetCurrentClassLogger();
-
             try
             {
                 foreach (var locationInv in Context.LocationInventory.Where(li => li.LocationId == locationId))
@@ -98,7 +92,7 @@ namespace Project1.DataAccess.DataRepos
             }
             catch (SqlException ex)
             {
-                logger.Error(ex);
+                _logger.LogError(ex.ToString());
             }
             SaveChangesAndCheckException();
         }

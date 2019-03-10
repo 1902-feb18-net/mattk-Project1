@@ -1,4 +1,4 @@
-﻿using NLog;
+﻿using Microsoft.Extensions.Logging;
 using Project1.BLL.IDataRepos;
 using System;
 using System.Collections.Generic;
@@ -10,6 +10,8 @@ namespace Project1.DataAccess.DataRepos
 {
     public class OrderItemRepo : IProject1Repo, IOrderItemRepo
     {
+        public readonly ILogger<OrderItemRepo> _logger;
+
         public static Project1Context Context { get; set; }
 
         public OrderItemRepo(Project1Context dbContext)
@@ -19,19 +21,17 @@ namespace Project1.DataAccess.DataRepos
 
         public void SaveChangesAndCheckException()
         {
-            ILogger logger = LogManager.GetCurrentClassLogger();
-
             try
             {
                 Context.SaveChanges();
             }
             catch (InvalidOperationException ex)
             {
-                logger.Error(ex);
+                _logger.LogError(ex.ToString());
             }
             catch (SqlException ex)
             {
-                logger.Error(ex);
+                _logger.LogError(ex.ToString());
             }
         }
 
@@ -46,30 +46,26 @@ namespace Project1.DataAccess.DataRepos
 
         public IEnumerable<Project1.BLL.OrderItem> GetAllOrderItems()
         {
-            ILogger logger = LogManager.GetCurrentClassLogger();
-
             try
             {
                 return Mapper.Map(Context.CupcakeOrderItem.ToList());
             }
             catch (SqlException ex)
             {
-                logger.Error(ex);
+                _logger.LogError(ex.ToString());
                 return null;
             }
         }
 
         public IEnumerable<Project1.BLL.OrderItem> GetOrderItems(int orderId)
         {
-            ILogger logger = LogManager.GetCurrentClassLogger();
-
             try
             {
                 return Mapper.Map(Context.CupcakeOrderItem.Where(coi => coi.OrderId == orderId));
             }
             catch (SqlException ex)
             {
-                logger.Error(ex);
+                _logger.LogError(ex.ToString());
                 return null;
             }
         }

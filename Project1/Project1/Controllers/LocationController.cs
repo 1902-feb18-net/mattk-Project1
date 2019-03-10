@@ -178,7 +178,7 @@ namespace Project1.Controllers
                 LocationInventoryRepo.FillLocationInventory(newLocationId);
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
                 return View();
             }
