@@ -1,4 +1,5 @@
-﻿using Project1.BLL;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Project1.BLL;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,8 +10,12 @@ namespace Project1.ViewModels
 {
     public class LocationInventoryViewModel
     {
+        [BindNever]
         public int LocationId { get; set; }
+
         public string LocationName { get; set; }
+
+        [BindNever]
         public int IngredientId { get; set; }
 
         [Display (Name = "Ingredient Type")]

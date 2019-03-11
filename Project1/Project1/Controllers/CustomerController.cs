@@ -166,13 +166,29 @@ namespace Project1.Controllers
         {
             try
             {
+                if (customer.FirstName.Length == 0 || customer.LastName.Length == 0)
+                {
+                    string message = "The customer must have a first and last name.";
+                    TempData["ErrorMessage"] = message;
+                    _logger.LogWarning(message);
+                    return RedirectToAction("Error", "Home");
+                }
+                if (CustomerRepo.CheckCustomerFullNameExists(customer.ReturnFullName()))
+                {
+                    string message = "There is already a customer in the system with that first and last name.";
+                    TempData["ErrorMessage"] = message;
+                    _logger.LogWarning(message);
+                    return RedirectToAction("Error", "Home");
+                }
                 int defLocation = customer.DefaultLocation ?? 0;
                 if (defLocation != 0)
                 {
                     bool LocationExists = LocRepo.CheckLocationExists(defLocation);
                     if (!LocationExists)
                     {
-                        _logger.LogWarning("This location is not in the database.");
+                        string message = "This location is not in the database.";
+                        TempData["ErrorMessage"] = message;
+                        _logger.LogWarning(message);
                         return RedirectToAction("Error", "Home");
                     }
                 }
@@ -204,43 +220,43 @@ namespace Project1.Controllers
         }
 
         // POST: Customer/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add update logic here
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Edit(int id, IFormCollection collection)
+        //{
+        //    try
+        //    {
+        //        // TODO: Add update logic here
 
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    catch
+        //    {
+        //        return View();
+        //    }
+        //}
 
         // GET: Customer/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
+        //public ActionResult Delete(int id)
+        //{
+        //    return View();
+        //}
 
         // POST: Customer/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public ActionResult Delete(int id, IFormCollection collection)
+        //{
+        //    try
+        //    {
+        //        // TODO: Add delete logic here
 
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    catch
+        //    {
+        //        return View();
+        //    }
+        //}
     }
 }

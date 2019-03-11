@@ -11,11 +11,11 @@ namespace Project1.BLL
         public string Name { get; set; }
 
         public static bool CheckCanOrderCupcake(int locationId,
-            Dictionary<int, int> cupcakeInputs, List<Order> orders, List<OrderItem> orderItems)
+            List<Order> orders, List<OrderItem> orderItems)
         {
             bool result = false;
             int sum = 0;
-            foreach (var item in cupcakeInputs)
+            foreach (var cupcake in orderItems)
             {
                 // Get orders at store location
                 var ordersAtStore = orders.Where(o => o.OrderLocation == locationId);
@@ -29,7 +29,7 @@ namespace Project1.BLL
                     var thisOrderItems = orderItems.Where(oi => oi.OrderId == order.Id);
                     foreach (var orderItem in thisOrderItems)
                     {
-                        if (orderItem.CupcakeId == item.Key)
+                        if (orderItem.CupcakeId == cupcake.CupcakeId)
                         {
                             sum += orderItem.Quantity ?? 0;
                         }
@@ -46,19 +46,20 @@ namespace Project1.BLL
         }
 
         public static bool CheckOrderFeasible(Dictionary<int, Dictionary<int, decimal>> recipes,
-            Dictionary<int, decimal> locationInv, Dictionary<int, int> cupcakeInputs)
+            List<LocationInventory> locationInv, List<OrderItem> orderItems)
         {
-            foreach (var cupcake in cupcakeInputs)
+            foreach (var cupcake in orderItems)
             {
-                foreach (var ingredient in locationInv.ToList())
+                foreach (var ingredient in locationInv)
                 {
-                    locationInv[ingredient.Key] -= recipes[cupcake.Key][ingredient.Key] * cupcake.Value;
+                    ingredient.Amount -= 
+                        recipes[cupcake.CupcakeId][ingredient.IngredientId] * (cupcake.Quantity ?? 0);
                 }
             }
 
-            foreach (var item in locationInv)
+            foreach (var ingredient in locationInv)
             {
-                if (locationInv[item.Key] < 0)
+                if (ingredient.Amount < 0)
                 {
                     return false;
                 }

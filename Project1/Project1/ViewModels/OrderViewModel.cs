@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -8,6 +9,7 @@ namespace Project1.ViewModels
 {
     public class OrderViewModel
     {
+        [BindNever]
         public int OrderId { get; set; }
 
         [Display(Name = "Location Name")]

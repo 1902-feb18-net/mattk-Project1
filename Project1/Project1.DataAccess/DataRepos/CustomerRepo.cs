@@ -49,6 +49,19 @@ namespace Project1.DataAccess.DataRepos
             }
         }
 
+        public bool CheckCustomerFullNameExists(string fullName)
+        {
+            try
+            {
+                return Context.Customer.Any(l => (l.FirstName + " " + l.LastName) == fullName);
+            }
+            catch (SqlException ex)
+            {
+                _logger.LogError(ex.ToString());
+                return false;
+            }
+        }
+
         public void AddCustomer(Project1.BLL.Customer customer)
         {
             var newCustomer = new Project1.DataAccess.DataClasses.Customer

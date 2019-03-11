@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -121,6 +122,7 @@ namespace Project1.Controllers
             List<Project1.BLL.OrderItem> orderItemsTemp = new List<Project1.BLL.OrderItem>();
             foreach (var cupcake in cupcakesTemp)
             {
+                cupcake.Type = Regex.Replace(cupcake.Type, "([a-z])([A-Z])", "$1 $2");
                 orderItemsTemp.Add(new Project1.BLL.OrderItem
                 {
                     Id = 0,
@@ -141,6 +143,7 @@ namespace Project1.Controllers
             {
                 customer.FullName = customer.ReturnFullName();
             }
+
             // give the Create view values for its dropdown
             return View(viewModel);
         }
@@ -152,10 +155,103 @@ namespace Project1.Controllers
         {
             try
             {
+                for (int i = 0; i < viewModel.OrderItems.Count; i++)
+                {
+                    viewModel.OrderItems[i].CupcakeId = i + 1;
+                }
+                List<Project1.BLL.OrderItem> newOrderItems = viewModel.OrderItems
+                                                    .Where(oi => oi.Quantity != null).ToList();
+                if (newOrderItems.Count == 0)
+                {
+                    string message = "The order must have at least one cupcake.";
+                    TempData["ErrorMessage"] = message;
+                    _logger.LogWarning(message);
+                    return RedirectToAction("Error", "Home");
+                }
 
+                viewModel.Locations = LocRepo.GetAllLocations().ToList();
+                viewModel.Customers = CustomerRepo.GetAllCustomers().ToList();
+                viewModel.Cupcakes = CupcakeRepo.GetAllCupcakes().ToList();
+                viewModel.CustomerName = viewModel.Customers.Single(c => c.Id == viewModel.CustomerId).ReturnFullName();
+                viewModel.LocationName = viewModel.Locations.Single(l => l.Id == viewModel.LocationId).Name;
 
-
-
+                if (!CustomerRepo.CheckCustomerExists(viewModel.CustomerId))
+                {
+                    string message = $"Customer {viewModel.CustomerName} is not in the database.";
+                    TempData["ErrorMessage"] = message;
+                    _logger.LogWarning(message);
+                    return RedirectToAction("Error", "Home");
+                }
+                if (!LocRepo.CheckLocationExists(viewModel.LocationId))
+                {
+                    string message = $"Location {viewModel.LocationName} is not in the list of stores.";
+                    TempData["ErrorMessage"] = message;
+                    _logger.LogWarning(message);
+                    return RedirectToAction("Error", "Home");
+                }
+                // The following checks to see if the customer can order from this store location
+                // If the customer has ordered at this store within the past 2 hours, than they shouldn't be
+                // able to order again.
+                var orders = OrderRepo.GetAllOrders().ToList();
+                if (!Project1.BLL.Customer.CheckCustomerCanOrder(viewModel.CustomerId,
+                    viewModel.LocationId, orders))
+                {
+                    string message = "Customer can't place an order at this store because it hasn't been 2 hours \n" +
+                        "since there last order yet.";
+                    TempData["ErrorMessage"] = message;
+                    _logger.LogWarning(message);
+                    return RedirectToAction("Error", "Home");
+                }
+                foreach (var cupcake in newOrderItems)
+                {
+                    if (!CupcakeRepo.CheckCupcakeExists(cupcake.CupcakeId))
+                    {
+                        string message = $"Cupcake {viewModel.Cupcakes.Single(c => c.Id == cupcake.CupcakeId).Type} " +
+                            $"is not in the database";
+                        TempData["ErrorMessage"] = message;
+                        _logger.LogWarning(message);
+                        return RedirectToAction("Error", "Home");
+                    }
+                    int qnty = cupcake.Quantity ?? 0;
+                    if (!Project1.BLL.Order.CheckCupcakeQuantity(qnty))
+                    {
+                        string message = $"Quantity for cupcake " +
+                            $"{viewModel.Cupcakes.Single(c => c.Id == cupcake.CupcakeId).Type} " +
+                            $"is out of range";
+                        TempData["ErrorMessage"] = message;
+                        _logger.LogWarning(message);
+                        return RedirectToAction("Error", "Home");
+                    }
+                }
+                // The following gets all orders and their associated order items in order
+                // to validate that the store location's supply of the cupcakes in the customer's
+                // requested order have not been exhausted.
+                // Cupcake exhaustion happens when a store location has had more than 1000 cupcakes of one
+                // type sold within 24 hours, at that point they cannot sell anymore.
+                // This is arbitrary business logic that I added in order to satisfy the Project0
+                // requirements.
+                var orderItems = OrderItemRepo.GetAllOrderItems().ToList();
+                if (!Project1.BLL.Location.CheckCanOrderCupcake(viewModel.LocationId,
+                    orders, orderItems))
+                {
+                    string message = $"This store has exhausted supply of one of those cupcakes. " +
+                        $"Try back in 24 hours.";
+                    TempData["ErrorMessage"] = message;
+                    _logger.LogWarning(message);
+                    return RedirectToAction("Error", "Home");
+                }
+                // The following gets the recipes for the cupcakes in the customer's requested order
+                // and checks to make sure that the store location's inventory can support the order.
+                var recipes = RecipeItemRepo.GetRecipes(newOrderItems);
+                var locationInv = LocationInventoryRepo.GetLocationInventoryByLocationId(viewModel.LocationId).ToList();
+                if (!Project1.BLL.Location.CheckOrderFeasible(recipes, locationInv, newOrderItems))
+                {
+                    string message = $"This store does not have enough ingredients to place " +
+                        $"the requested order.";
+                    TempData["ErrorMessage"] = message;
+                    _logger.LogWarning(message);
+                    return RedirectToAction("Error", "Home");
+                }
 
                 var newOrder = new P1B.Order
                 {
@@ -166,25 +262,20 @@ namespace Project1.Controllers
                 OrderRepo.AddCupcakeOrder(newOrder);
 
                 int newOrderId = OrderRepo.GetLastCupcakeOrderAdded();
-
-                for (int i = 0; i < viewModel.OrderItems.Count; i++)
+                for (int i = 0; i < newOrderItems.Count; i++)
                 {
-                    viewModel.OrderItems[i].OrderId = newOrderId;
-                    viewModel.OrderItems[i].CupcakeId = i + 1;
+                    newOrderItems[i].OrderId = newOrderId;
                 }
 
-                List<Project1.BLL.OrderItem> newOrderItems = viewModel.OrderItems
-                                                    .Where(oi => oi.Quantity != null).ToList();
                 OrderItemRepo.AddCupcakeOrderItems(newOrderItems);
-
-                var recipes = RecipeItemRepo.GetRecipes(newOrderItems);
                 LocationInventoryRepo.UpdateLocationInv(viewModel.LocationId, recipes, newOrderItems);
 
                 return RedirectToAction(nameof(Index));
             }
-            catch
+            catch (Exception ex)
             {
-                return View(viewModel);
+                _logger.LogError(ex.ToString());
+                return RedirectToAction("Error", "Home");
             }
         }
 

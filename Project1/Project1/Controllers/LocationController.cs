@@ -173,12 +173,16 @@ namespace Project1.Controllers
             {
                 if (location.Name.Length == 0)
                 {
-                    _logger.LogWarning("The location name cannot be empty.");
+                    string message = "The location name cannot be empty.";
+                    TempData["ErrorMessage"] = message;
+                    _logger.LogWarning(message);
                     return RedirectToAction("Error", "Home");
                 }
                 if (LocRepo.CheckLocationNameExists(location.Name))
                 {
-                    _logger.LogWarning("This location name has already been used in the database.");
+                    string message = "This location name has already been used in the database.";
+                    TempData["ErrorMessage"] = message;
+                    _logger.LogWarning(message);
                     return RedirectToAction("Error", "Home");
                 }
 
