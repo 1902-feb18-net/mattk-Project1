@@ -1,64 +1,69 @@
-DROP TABLE IF EXISTS Project0.CupcakeOrderItem
-DROP TABLE IF EXISTS Project0.CupcakeOrder
-DROP TABLE IF EXISTS Project0.Customer
-DROP TABLE IF EXISTS Project0.LocationInventory
-DROP TABLE IF EXISTS Project0.RecipeItem
-DROP TABLE IF EXISTS Project0.Cupcake
-DROP TABLE IF EXISTS Project0.Ingredient
-DROP TABLE IF EXISTS Project0.Location
+DROP TABLE IF EXISTS Project1.CupcakeOrderItem
+DROP TABLE IF EXISTS Project1.CupcakeOrder
+DROP TABLE IF EXISTS Project1.Customer
+DROP TABLE IF EXISTS Project1.LocationInventory
+DROP TABLE IF EXISTS Project1.RecipeItem
+DROP TABLE IF EXISTS Project1.Cupcake
+DROP TABLE IF EXISTS Project1.Ingredient
+DROP TABLE IF EXISTS Project1.Location
 
-UPDATE Project0.LocationInventory
+UPDATE Project1.LocationInventory
 SET Amount = 120.00
 WHERE 1=1;
 
-UPDATE Project0.LocationInventory
-SET Amount = 5000.00
-WHERE LocationID = 12;
+UPDATE Project1.LocationInventory
+SET Amount = 20000.00
+WHERE LocationID = 27;
 
 SELECT *
-FROM Project0.LocationInventory
+FROM Project1.LocationInventory
 WHERE LocationId = 1;
 
 SELECT *
-FROM Project0.Location;
+FROM Project1.Location;
 
 SELECT *
-FROM Project0.Customer;
+FROM Project1.Customer;
 
 SELECT *
-FROM Project0.RecipeItem;
+FROM Project1.Cupcake;
+
+SELECT *
+FROM Project1.RecipeItem;
 WHERE CupcakeId = 1;
 
 SELECT *
-FROM Project0.CupcakeOrder
+FROM Project1.CupcakeOrder
 WHERE LocationID = 12;
 
 SELECT *
-FROM Project0.Ingredient;
+FROM Project1.Ingredient;
 
-DELETE FROM Project0.CupcakeOrder
+DELETE FROM Project1.CupcakeOrder
 WHERE 1 = 1;
 
 SELECT *
-FROM Project0.CupcakeOrder;
+FROM Project1.CupcakeOrder;
 
 SELECT *
-FROM Project0.CupcakeOrderItem;
+FROM Project1.CupcakeOrderItem;
 
-DELETE FROM Project0.Location
-WHERE 1 = 1;
+TRUNCATE TABLE Project1.CupcakeOrderItem;
 
-TRUNCATE TABLE Project0.CupcakeOrderItem;
+TRUNCATE TABLE Project1.CupcakeOrder;
 
-TRUNCATE TABLE Project0.CupcakeOrder;
 
-DELETE FROM Project0.CupcakeOrder
+
+SELECT *
+FROM Project1.CupcakeOrderItem;
+
+INSERT INTO Project1.Location DEFAULT VALUES;
+
+DELETE FROM Project1.Location
 WHERE 1=1;
 
-SELECT *
-FROM Project0.CupcakeOrderItem;
+DELETE FROM Project1.Customer
+WHERE 1=1;
 
-INSERT INTO Project0.Location DEFAULT VALUES;
-
-DELETE FROM Project0.Location
-WHERE LocationId = 11;
+DELETE FROM Project1.CupcakeOrder
+WHERE 1=1;
