@@ -11,11 +11,11 @@ namespace Project1.BLL
         public string Name { get; set; }
 
         public static bool CheckCanOrderCupcake(int locationId,
-            List<Order> orders, List<OrderItem> orderItems)
+            List<Order> orders, List<OrderItem> orderItems, List<OrderItem> newOrderItems)
         {
             bool result = false;
             int sum = 0;
-            foreach (var cupcake in orderItems)
+            foreach (var cupcake in newOrderItems)
             {
                 // Get orders at store location
                 var ordersAtStore = orders.Where(o => o.OrderLocation == locationId);

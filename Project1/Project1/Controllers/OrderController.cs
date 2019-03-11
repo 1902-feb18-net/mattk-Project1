@@ -232,7 +232,7 @@ namespace Project1.Controllers
                 // requirements.
                 var orderItems = OrderItemRepo.GetAllOrderItems().ToList();
                 if (!Project1.BLL.Location.CheckCanOrderCupcake(viewModel.LocationId,
-                    orders, orderItems))
+                    orders, orderItems, newOrderItems))
                 {
                     string message = $"This store has exhausted supply of one of those cupcakes. " +
                         $"Try back in 24 hours.";
