@@ -13,12 +13,14 @@ namespace Project1.ViewModels
         public int OrderId { get; set; }
 
         [Display(Name = "Location Name")]
+        [Required]
         public int LocationId { get; set; }
 
         [Display (Name = "Location Name")]
         public string LocationName { get; set; }
 
         [Display(Name = "Customer Name")]
+        [Required]
         public int CustomerId { get; set; }
 
         [Display(Name = "Customer Name")]

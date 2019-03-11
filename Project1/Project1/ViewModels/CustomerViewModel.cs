@@ -13,8 +13,14 @@ namespace Project1.ViewModels
         public int CustomerId { get; set; }
 
         [Display (Name = "First Name")]
+        [Required]
+        [MaxLength(100)]
+        [DataType(DataType.Text)]
         public string FirstName { get; set; }
 
+        [Required]
+        [MaxLength(100)]
+        [DataType(DataType.Text)]
         [Display (Name = "Last Name")]
         public string LastName { get; set; }
 

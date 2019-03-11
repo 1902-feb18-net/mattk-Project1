@@ -161,24 +161,25 @@ namespace Project1.Controllers
         // GET: Location/Create
         public ActionResult Create()
         {
-            return View();
+            Project1.ViewModels.LocationViewModel viewModel = new LocationViewModel();
+            return View(viewModel);
         }
 
         // POST: Location/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(P1B.Location location)
+        public ActionResult Create(Project1.ViewModels.LocationViewModel viewModel)
         {
             try
             {
-                if (location.Name.Length == 0)
+                if (viewModel.LocationName.Length == 0)
                 {
                     string message = "The location name cannot be empty.";
                     TempData["ErrorMessage"] = message;
                     _logger.LogWarning(message);
                     return RedirectToAction("Error", "Home");
                 }
-                if (LocRepo.CheckLocationNameExists(location.Name))
+                if (LocRepo.CheckLocationNameExists(viewModel.LocationName))
                 {
                     string message = "This location name has already been used in the database.";
                     TempData["ErrorMessage"] = message;
@@ -189,11 +190,11 @@ namespace Project1.Controllers
                 // TODO: Add insert logic here
                 var newLocation = new P1B.Location
                 {
-                    Name = location.Name
+                    Name = viewModel.LocationName
                 };
 
                 // TODO: Add insert logic here
-                LocRepo.AddLocation(location);
+                LocRepo.AddLocation(newLocation);
                 int newLocationId = LocRepo.GetLastLocationAdded();
                 LocationInventoryRepo.FillLocationInventory(newLocationId);
                 return RedirectToAction(nameof(Index));
