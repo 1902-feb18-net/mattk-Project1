@@ -63,12 +63,15 @@ namespace Project1.Controllers
                 viewModel.OrderTotalAverage = sum / incrementer;
             }
 
-            if (viewModel.Locations != null)
+            if (viewModel.Locations.Count > 0)
             {
                 viewModel.LocationMostOrders = viewModel.Locations.MaxBy(sL =>
                 LocRepo.GetLocationOrderHistory(sL.Id).Count()).OrderBy(sL => sL.Id).First().Name;
-                viewModel.LocationWithLatestOrder = viewModel.Locations.Single(l => l.Id ==
-                    viewModel.Orders.MaxBy(o => o.OrderTime).First().OrderLocation).Name;
+                if (viewModel.Orders.Count > 0)
+                {
+                    viewModel.LocationWithLatestOrder = viewModel.Locations.Single(l => l.Id ==
+                        viewModel.Orders.MaxBy(o => o.OrderTime).First().OrderLocation).Name;
+                }
             }
 
             return View(viewModel);

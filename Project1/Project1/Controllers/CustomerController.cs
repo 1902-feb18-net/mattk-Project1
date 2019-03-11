@@ -77,7 +77,7 @@ namespace Project1.Controllers
             IEnumerable<P1B.Order> orders = CustomerRepo.GetCustomerOrderHistory(id).ToList();
             List<OrderViewModel> viewModels = new List<OrderViewModel>();
 
-            ViewData["CustomerName"] = customers.Single(c => c.Id == id).FullName;
+            ViewData["CustomerName"] = customers.Single(c => c.Id == id).ReturnFullName();
             ViewData["CustomerId"] = id;
 
             switch (sortOrder)
@@ -143,6 +143,7 @@ namespace Project1.Controllers
                 OrderTotal = OrderRepo.GetOrder(order.Id).GetTotalCost(OrderItemRepo.GetOrderItems(order.Id).ToList(),
                                         cupcakes.ToList())
             };
+
             // give the Create view values for its dropdown
             return View(viewModel);
         }
@@ -214,10 +215,10 @@ namespace Project1.Controllers
         }
 
         // GET: Customer/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
+        //public ActionResult Edit(int id)
+        //{
+        //    return View();
+        //}
 
         // POST: Customer/Edit/5
         //[HttpPost]

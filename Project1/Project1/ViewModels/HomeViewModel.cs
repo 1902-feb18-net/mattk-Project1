@@ -18,9 +18,9 @@ namespace Project1.ViewModels
         public decimal OrderTotalAverage { get; set; } = 0;
 
         [Display(Name = "Location With Most Orders")]
-        public string LocationMostOrders { get; set; } = "";
+        public string LocationMostOrders { get; set; } = "(none)";
 
         [Display(Name = "Location With Latest Order")]
-        public string LocationWithLatestOrder { get; set; }
+        public string LocationWithLatestOrder { get; set; } = "(none)";
     }
 }
