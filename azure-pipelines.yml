@@ -11,7 +11,7 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  solutionPath: './Project1/Project1'
+  solutionPath: '/Project1/Project1'
   appProjectPath: 'Project1'
 
 #Project1/Project1/Project1.csproj --configuration $(buildConfiguration)
