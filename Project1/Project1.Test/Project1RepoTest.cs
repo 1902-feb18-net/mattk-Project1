@@ -13,109 +13,109 @@ namespace Project1.Test
 {
     public class Project1RepoTest
     {
-        [Fact]
-        public void TestCheckLocationExistsTrue()
-        {
-            // Arrange
-            var optionsBuilder = new DbContextOptionsBuilder<Project1Context>();
-            optionsBuilder.UseSqlServer(SecretConfiguration.ConnectionString);
-            var options = optionsBuilder.Options;
+        //[Fact]
+        //public void TestCheckLocationExistsTrue()
+        //{
+        //    // Arrange
+        //    var optionsBuilder = new DbContextOptionsBuilder<Project1Context>();
+        //    optionsBuilder.UseSqlServer(SecretConfiguration.ConnectionString);
+        //    var options = optionsBuilder.Options;
 
-            using (var dbContext = new Project1Context(options))
-            {
-                ILocationRepo p0Repo = new LocationRepo(dbContext);
-                var locations = p0Repo.GetAllLocations();
-                // Act and Assert
-                Assert.True(p0Repo.CheckLocationExists(locations.ToList().First().Id));
-            }
-        }
+        //    using (var dbContext = new Project1Context(options))
+        //    {
+        //        ILocationRepo p0Repo = new LocationRepo(dbContext);
+        //        var locations = p0Repo.GetAllLocations();
+        //        // Act and Assert
+        //        Assert.True(p0Repo.CheckLocationExists(locations.ToList().First().Id));
+        //    }
+        //}
 
-        [Fact]
-        public void TestCheckLocationExistsFalse()
-        {
-            // Arrange
-            var optionsBuilder = new DbContextOptionsBuilder<Project1Context>();
-            optionsBuilder.UseSqlServer(SecretConfiguration.ConnectionString);
-            var options = optionsBuilder.Options;
+        //[Fact]
+        //public void TestCheckLocationExistsFalse()
+        //{
+        //    // Arrange
+        //    var optionsBuilder = new DbContextOptionsBuilder<Project1Context>();
+        //    optionsBuilder.UseSqlServer(SecretConfiguration.ConnectionString);
+        //    var options = optionsBuilder.Options;
 
-            using (var dbContext = new Project1Context(options))
-            {
-                ILocationRepo p0Repo = new LocationRepo(dbContext);
+        //    using (var dbContext = new Project1Context(options))
+        //    {
+        //        ILocationRepo p0Repo = new LocationRepo(dbContext);
 
-                // Act and Assert
-                Assert.False(p0Repo.CheckLocationExists(100000));
-            }
-        }
+        //        // Act and Assert
+        //        Assert.False(p0Repo.CheckLocationExists(100000));
+        //    }
+        //}
 
-        [Fact]
-        public void TestCheckCustomerExistsTrue()
-        {
-            // Arrange
-            var optionsBuilder = new DbContextOptionsBuilder<Project1Context>();
-            optionsBuilder.UseSqlServer(SecretConfiguration.ConnectionString);
-            var options = optionsBuilder.Options;
+        //[Fact]
+        //public void TestCheckCustomerExistsTrue()
+        //{
+        //    // Arrange
+        //    var optionsBuilder = new DbContextOptionsBuilder<Project1Context>();
+        //    optionsBuilder.UseSqlServer(SecretConfiguration.ConnectionString);
+        //    var options = optionsBuilder.Options;
 
-            using (var dbContext = new Project1Context(options))
-            {
-                ICustomerRepo p0Repo = new CustomerRepo(dbContext);
+        //    using (var dbContext = new Project1Context(options))
+        //    {
+        //        ICustomerRepo p0Repo = new CustomerRepo(dbContext);
 
-                var customers = p0Repo.GetAllCustomers();
+        //        var customers = p0Repo.GetAllCustomers();
 
-                // Act and Assert
-                Assert.True(p0Repo.CheckCustomerExists(customers.ToList().First().Id));
-            }
-        }
+        //        // Act and Assert
+        //        Assert.True(p0Repo.CheckCustomerExists(customers.ToList().First().Id));
+        //    }
+        //}
 
-        [Fact]
-        public void TestCheckCustomerExistsFalse()
-        {
-            // Arrange
-            var optionsBuilder = new DbContextOptionsBuilder<Project1Context>();
-            optionsBuilder.UseSqlServer(SecretConfiguration.ConnectionString);
-            var options = optionsBuilder.Options;
+        //[Fact]
+        //public void TestCheckCustomerExistsFalse()
+        //{
+        //    // Arrange
+        //    var optionsBuilder = new DbContextOptionsBuilder<Project1Context>();
+        //    optionsBuilder.UseSqlServer(SecretConfiguration.ConnectionString);
+        //    var options = optionsBuilder.Options;
 
-            using (var dbContext = new Project1Context(options))
-            {
-                ICustomerRepo p0Repo = new CustomerRepo(dbContext);
+        //    using (var dbContext = new Project1Context(options))
+        //    {
+        //        ICustomerRepo p0Repo = new CustomerRepo(dbContext);
 
-                // Act and Assert
-                Assert.False(p0Repo.CheckCustomerExists(100000));
-            }
-        }
+        //        // Act and Assert
+        //        Assert.False(p0Repo.CheckCustomerExists(100000));
+        //    }
+        //}
 
-        [Fact]
-        public void TestCheckCupcakeExistsTrue()
-        {
-            // Arrange
-            var optionsBuilder = new DbContextOptionsBuilder<Project1Context>();
-            optionsBuilder.UseSqlServer(SecretConfiguration.ConnectionString);
-            var options = optionsBuilder.Options;
+        //[Fact]
+        //public void TestCheckCupcakeExistsTrue()
+        //{
+        //    // Arrange
+        //    var optionsBuilder = new DbContextOptionsBuilder<Project1Context>();
+        //    optionsBuilder.UseSqlServer(SecretConfiguration.ConnectionString);
+        //    var options = optionsBuilder.Options;
 
-            using (var dbContext = new Project1Context(options))
-            {
-                ICupcakeRepo p0Repo = new CupcakeRepo(dbContext);
-                var cupcakes = p0Repo.GetAllCupcakes();
+        //    using (var dbContext = new Project1Context(options))
+        //    {
+        //        ICupcakeRepo p0Repo = new CupcakeRepo(dbContext);
+        //        var cupcakes = p0Repo.GetAllCupcakes();
 
-                // Act and Assert
-                Assert.True(p0Repo.CheckCupcakeExists(cupcakes.ToList().First().Id));
-            }
-        }
+        //        // Act and Assert
+        //        Assert.True(p0Repo.CheckCupcakeExists(cupcakes.ToList().First().Id));
+        //    }
+        //}
 
-        [Fact]
-        public void TestCheckCupcakeExistsFalse()
-        {
-            // Arrange
-            var optionsBuilder = new DbContextOptionsBuilder<Project1Context>();
-            optionsBuilder.UseSqlServer(SecretConfiguration.ConnectionString);
-            var options = optionsBuilder.Options;
+        //[Fact]
+        //public void TestCheckCupcakeExistsFalse()
+        //{
+        //    // Arrange
+        //    var optionsBuilder = new DbContextOptionsBuilder<Project1Context>();
+        //    optionsBuilder.UseSqlServer(SecretConfiguration.ConnectionString);
+        //    var options = optionsBuilder.Options;
 
-            using (var dbContext = new Project1Context(options))
-            {
-                ICupcakeRepo p0Repo = new CupcakeRepo(dbContext);
+        //    using (var dbContext = new Project1Context(options))
+        //    {
+        //        ICupcakeRepo p0Repo = new CupcakeRepo(dbContext);
 
-                // Act and Assert
-                Assert.False(p0Repo.CheckCupcakeExists(100000));
-            }
-        }
+        //        // Act and Assert
+        //        Assert.False(p0Repo.CheckCupcakeExists(100000));
+        //    }
+        //}
     }
 }
