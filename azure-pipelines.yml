@@ -11,9 +11,28 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
+  solutionPath: '.'
+  appProjectPath: 'Project1'
 
 steps:
 - script: dotnet build Project1/Project1/Project1.csproj --configuration $(buildConfiguration)
   displayName: 'dotnet build $(buildConfiguration)'
-
+- task: DotNetCoreCLI@2
+  inputs:
+    command: publish
+    projects: '$(appProjectPath)'
+    publishWebProjects: false
+    arguments: >-
+      --configuration $(buildConfiguration)
+      --output $(System.DefaultWorkingDirectory)/publish
+    zipAfterPublish: true
+  displayName: dotnet publish
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    # based on name given to Azure Resource Manager service connection
+    azureSubscription: 'matts-cupcakes'
+    # the name of the App Service resource in Azure (also, the subdomain of the .azurewebsites URL)
+    WebAppName: 'kagel1902cupcakes'
+    Package: $(System.DefaultWorkingDirectory)/publish/*.zip
+    removeAdditionalFilesFlag: true
 
