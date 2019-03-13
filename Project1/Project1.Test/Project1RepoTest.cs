@@ -16,9 +16,19 @@ namespace Project1.Test
         //[Fact]
         //public void TestCheckLocationExistsTrue()
         //{
-        //    // Arrange
+            // Arrange
+        //    public static void Main(string[] args)
+        //    {
+        //        CreateWebHostBuilder(args).Build().Run();
+        //    }
+
+        //    CreateWebHostBuilder(string[] args) =>
+        //        WebHost.CreateDefaultBuilder(args)
+        //            .UseStartup<Startup>()
+        //            .UseNLog();
+
         //    var optionsBuilder = new DbContextOptionsBuilder<Project1Context>();
-        //    optionsBuilder.UseSqlServer(SecretConfiguration.ConnectionString);
+        //    optionsBuilder.UseSqlServer(Configuration.ConnectionString);
         //    var options = optionsBuilder.Options;
 
         //    using (var dbContext = new Project1Context(options))
